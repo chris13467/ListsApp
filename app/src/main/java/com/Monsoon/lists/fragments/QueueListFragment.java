@@ -24,6 +24,10 @@ import com.google.android.material.snackbar.Snackbar;
 public class QueueListFragment extends Fragment {
 
 private QueueListFragmentBinding binding;
+private QueueListAdapter adapter;
+private QueueList list;
+
+
 
     @Override
     public View onCreateView(
@@ -38,15 +42,22 @@ private QueueListFragmentBinding binding;
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        QueueList list = (QueueList) ((MainActivity)getActivity()).getUserLists().getCurrentList();
+        list = (QueueList) ((MainActivity)getActivity()).getUserLists().getCurrentList();
         ((MainActivity)getActivity()).changeToolbarTitle(list.getName());
         ((MainActivity)getActivity()).onMenuContextChanged(MenuState.QUEUE_LIST_NORMAL);
         binding.queueListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        QueueListAdapter adapter = new QueueListAdapter(list, new QueueListAdapter.OnItemClickListener(){
+        adapter = new QueueListAdapter(list, new QueueListAdapter.OnItemClickListener(){
 
             @Override
             public void onItemClick(QueueItem item) {
 
+            }
+
+            @Override
+            public void onItemLongClick(BaseListItem item) {
+                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.BASIC_LIST_SELECT_MODE);
+                adapter.changeSelectMode(true);
+                adapter.notifyDataSetChanged();
             }
         });
         binding.queueListView.setAdapter(adapter);
