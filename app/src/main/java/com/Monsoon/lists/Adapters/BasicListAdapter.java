@@ -25,7 +25,6 @@ import com.Monsoon.lists.R;
 
 public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> {
 
-    //TODO: add on long click listener
     public interface OnItemClickListener {
         void onItemClick(BaseListItem item);
         void onItemLongClick(BaseListItem item);

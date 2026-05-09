@@ -23,7 +23,6 @@ import com.Monsoon.lists.R;
 
 public class QueueListAdapter extends RecyclerView.Adapter<QueueListAdapter.ViewHolder> {
 
-    //TODO: add on long click listener
     public interface OnItemClickListener {
         void onItemClick(QueueItem item);
         void onItemLongClick(BaseListItem item);

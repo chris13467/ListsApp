@@ -26,8 +26,7 @@ import com.Monsoon.lists.enums.Frequency;
 
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHolder> {
 
-    //TODO: add on long click listener
-    //TODO: add checkBox listener
+   
     public interface OnItemClickListener {
         void onItemClick(TodoItem item);
         void onItemLongClick(TodoItem item);
