@@ -25,6 +25,7 @@ import java.util.Objects;
 public class ListOfListsFragment extends Fragment {
 
 private ListOfListsFragmentBinding binding;
+private ListOfListsAdapter adapter;
 
     @Override
     public View onCreateView(
@@ -42,7 +43,7 @@ private ListOfListsFragmentBinding binding;
         ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
         binding.ListsView.setLayoutManager(new GridLayoutManager(getContext(), Constants.NUM_COLOMNS));
         ListOfLists userLists = ((MainActivity) requireActivity()).getUserLists();
-        ListOfListsAdapter adapter = new ListOfListsAdapter(userLists, new ListOfListsAdapter.OnItemClickListener() {
+        adapter = new ListOfListsAdapter(userLists, new ListOfListsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(baseList item) {
                 ((MainActivity)requireActivity()).getUserLists().setCurrentList(item);
@@ -70,7 +71,9 @@ private ListOfListsFragmentBinding binding;
 
             @Override
             public void onItemLongClick(baseList item) {
-
+                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.LIST_OF_LISTS_SELECT_MODE);
+                adapter.changeSelectMode(true);
+                adapter.notifyDataSetChanged();
             }
         });
         binding.ListsView.setAdapter(adapter);

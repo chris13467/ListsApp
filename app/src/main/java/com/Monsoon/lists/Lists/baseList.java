@@ -12,17 +12,28 @@ public abstract class baseList implements Serializable {
     protected String name_;
     protected AbstractList<BaseListItem> items_;
     protected BaseListItem currentItem_;
+    private boolean isSelected;
 
     //Constructors
     public baseList() {
         name_ = "";
         listType_ = Constants.ABSTRACT;
         currentItem_ = new BaseListItem();
+        isSelected = false;
     }
     public baseList(String name) {
         this.name_ = name;
         listType_ = Constants.ABSTRACT;
         currentItem_ = new BaseListItem();
+        isSelected = false;
+    }
+
+    public boolean isSelected(){
+        return isSelected;
+    }
+
+    public void setSelected(boolean b){
+        isSelected = b;
     }
 
     //Getters

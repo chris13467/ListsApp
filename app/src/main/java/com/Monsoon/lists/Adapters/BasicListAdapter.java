@@ -80,6 +80,7 @@ public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.View
                     return false;
                 }
             });
+
         }
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.Lists.ListOfLists;
+import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
 
@@ -90,6 +91,7 @@ private OnMenuItemPressed menuListener;
             case BASIC_LIST_SELECT_MODE:
             case TODO_LIST_SELECT_MODE:
             case QUEUE_LIST_SELECT_MODE:
+            case LIST_OF_LISTS_SELECT_MODE:
                 menu.getItem(0).setVisible(false);
                 menu.getItem(1).setVisible(true);
                 break;
@@ -130,8 +132,15 @@ private OnMenuItemPressed menuListener;
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
             int currentId = navController.getCurrentDestination().getId();
             navController.popBackStack(currentId, true);
-            for (int i = lists.getCurrentList().getList().size(); i > 0; i--){
-                if (lists.getCurrentList().getList().get(i - 1).isSelected()) lists.getCurrentList().removeItem(i);
+            if (menuState == MenuState.LIST_OF_LISTS_SELECT_MODE){
+                for (int i = lists.getUserLists().size(); i > 0; i--){
+                    baseList currentList = lists.getUserLists().get(i - 1);
+                    if (currentList.isSelected()) lists.removeList(currentList);
+                }
+            } else {
+                for (int i = lists.getCurrentList().getList().size(); i > 0; i--){
+                    if (lists.getCurrentList().getList().get(i - 1).isSelected()) lists.getCurrentList().removeItem(i-1);
+                }
             }
             navController.navigate(currentId);
             OnListChange();

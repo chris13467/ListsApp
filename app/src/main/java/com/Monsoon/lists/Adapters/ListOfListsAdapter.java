@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -38,26 +41,49 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
     }
     ListOfLists data;
     OnItemClickListener listener;
+    boolean isSelectMode;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView listNameView; //TODO: add timestamp
         RecyclerView listPreview;
         CardView cardView;
+        FrameLayout overlay;
+
+        CheckBox selectButton;
 
         public ViewHolder(View itemView){
             super(itemView);
             listNameView = itemView.findViewById(R.id.list_name_view);
             listPreview = itemView.findViewById(R.id.list_preview);
             cardView = itemView.findViewById(R.id.card_view);
+            overlay = itemView.findViewById(R.id.lists_overlay);
+            selectButton = itemView.findViewById(R.id.selected_radio_list);
         }
 
         public void bind(final baseList item, final OnItemClickListener listener) {
+            if (isSelectMode) overlay.setVisibility(View.VISIBLE);
+            else item.setSelected(false);
+            selectButton.setChecked(item.isSelected());
+
+            overlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectButton.setChecked(!selectButton.isChecked());
+                }
+            });
+            selectButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    item.setSelected(selectButton.isChecked());
+                }
+            });
+
             listNameView.setText(item.getName());
-            //TODO: add timestamp
-            //TODO: add list preview
+            //TODO: add current Item
             listPreview.setLayoutManager(new LinearLayoutManager(listPreview.getContext()));
             switch (item.getListType()){
                 case Constants.BASIC:
+
                     BasicListAdapter basicListAdapter = new BasicListAdapter((BasicList) item, new BasicListAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(BaseListItem item_b) {
@@ -103,11 +129,17 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
                     listener.onItemClick(item);
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    listener.onItemLongClick(item);
+                    item.setSelected(true);
+                    return false;
+                }
+            });
+            // TODO: add on long click listener to all preview views
         }
 
-        public void bindSelectMode(final baseList item, final OnItemClickListener listener){
-
-        }
 
     }
 
@@ -130,12 +162,15 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
     @Override
     public void onBindViewHolder(@NonNull ListOfListsAdapter.ViewHolder holder, int position) {
         baseList currentItem = data.getUserLists().get(position);
-
         holder.bind(currentItem, listener);
     }
 
     @Override
     public int getItemCount() {
         return data.getUserLists().size();
+    }
+
+    public void changeSelectMode(boolean b){
+        this.isSelectMode = b;
     }
 }
