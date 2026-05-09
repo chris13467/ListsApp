@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ListOfListsFragment">
+
+    <fragment
+        android:id="@+id/ListOfListsFragment"
+        android:name="com.Monsoon.lists.fragments.ListOfListsFragment"
+        android:label="@string/lists"
+        tools:layout="@layout/list_of_lists_fragment">
+
+        <action
+            android:id="@+id/action_load_meal_plan"
+            app:destination="@id/MealPlanFragment" />
+        <action
+            android:id="@+id/action_load_basic_list"
+            app:destination="@id/basic_list_fragment" />
+        <action
+            android:id="@+id/action_load_todo_list"
+            app:destination="@id/todo_list_fragment" />
+        <action
+            android:id="@+id/action_load_queue_list"
+            app:destination="@id/queue_list_fragment" />
+        <action
+            android:id="@+id/action_add_list"
+            app:destination="@id/add_list_fragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/basic_list_fragment"
+        android:name="com.Monsoon.lists.fragments.BasicListFragment"
+        android:label="@string/basic_list"
+        tools:layout="@layout/fragment_meal_plan" >
+
+        <action
+            android:id="@+id/action_return_to_lists_of_lists"
+            app:destination="@id/ListOfListsFragment" />
+        <action
+            android:id="@+id/action_add_item"
+            app:destination="@id/add_item_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/todo_list_fragment"
+        android:name="com.Monsoon.lists.fragments.TodoListFragment"
+        android:label="@string/todo_list"
+        tools:layout="@layout/todo_list_fragment" >
+
+        <action
+            android:id="@+id/action_return_to_lists_of_lists"
+            app:destination="@id/ListOfListsFragment" />
+        <action
+            android:id="@+id/action_add_item"
+            app:destination="@id/add_item_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/queue_list_fragment"
+        android:name="com.Monsoon.lists.fragments.QueueListFragment"
+        android:label="@string/queue_list"
+        tools:layout="@layout/queue_list_fragment" >
+
+
+        <action
+            android:id="@+id/action_return_to_lists_of_lists"
+            app:destination="@id/ListOfListsFragment" />
+        <action
+            android:id="@+id/action_add_item"
+            app:destination="@id/add_item_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/MealPlanFragment"
+        android:name="com.Monsoon.lists.fragments.MealPlanFragment"
+        android:label="@string/meal_plan"
+        tools:layout="@layout/fragment_meal_plan" >
+        <action
+            android:id="@+id/action_return_to_lists_of_lists"
+            app:destination="@id/ListOfListsFragment" />
+        <action
+            android:id="@+id/action_add_item"
+            app:destination="@id/add_item_fragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/add_list_fragment"
+        android:name="com.Monsoon.lists.fragments.AddListFragment"
+        android:label="@string/add_list"
+        tools:layout="@layout/fragment_add_list" >
+        <action
+            android:id="@+id/action_submit"
+            app:destination="@id/ListOfListsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/add_item_fragment"
+        android:name="com.Monsoon.lists.fragments.AddItemFragment"
+        android:label="@string/add_item"
+        tools:layout="@layout/fragment_add_item" >
+        <action
+            android:id="@+id/action_basic_submit"
+            app:destination="@id/basic_list_fragment"/>
+        <action
+            android:id="@+id/action_todo_submit"
+            app:destination="@id/todo_list_fragment"/>
+        <action
+            android:id="@+id/action_queue_submit"
+            app:destination="@id/queue_list_fragment"/>
+        <action
+            android:id="@+id/action_meal_plan_submit"
+            app:destination="@id/MealPlanFragment"/>
+    </fragment>
+
+</navigation>

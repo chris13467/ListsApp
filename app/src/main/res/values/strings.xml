@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Lists</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+   
+    <string name="lists">Lists</string>
+    <string name="meal_plan">Meal Plan</string>
+    <string name="basic_list">Basic List</string>
+    <string name="todo_list">Todo List</string>
+    <string name="queue_list">Queue List</string>
+    <string name="dinner">Dinner:</string>
+    <string name="lunch">Lunch:</string>
+    <string name="breakfast">Breakfast:</string>
+    
+    <string name="add_list">Add List</string>
+    <string name="enter_list_name">Enter List Name</string>
+    <string name="create">Create</string>
+    <string name="repeatable">Repeatable</string>
+    <string name="remove_on_check">Remove todo item on check</string>
+    <string name="end_repeat">End repeat on specific date</string>
+    <string name="select_repeat_frequency">Select Repeat Frequency</string>
+    <string name="enter_date">Enter End Date</string>
+    <string name="enter_num_days">Enter number of days to repeat</string>
+    <string name="days_before_removal">Enter days until meals removed</string>
+    <string name="add_item">Add Item</string>
+    <string name="enter_item_content">Enter Item Content</string>
+    <string name="insert_position">Insert in custom position</string>
+    <string name="enter_position">Enter insert Position:</string>
+    <string name="enter_meal_date">Enter meal date</string>
+    <string name="enter_meal_name">Enter meal name</string>
+</resources>
