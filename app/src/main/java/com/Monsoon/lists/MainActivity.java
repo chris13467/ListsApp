@@ -88,6 +88,7 @@ private OnMenuItemPressed menuListener;
                 }
                 break;
             case BASIC_LIST_SELECT_MODE:
+            case TODO_LIST_SELECT_MODE:
                 menu.getItem(0).setVisible(false);
                 menu.getItem(1).setVisible(true);
                 break;
@@ -132,8 +133,7 @@ private OnMenuItemPressed menuListener;
                 if (lists.getCurrentList().getList().get(i - 1).isSelected()) lists.getCurrentList().removeItem(i);
             }
             navController.navigate(currentId);
-
-
+            OnListChange();
 
         }
 

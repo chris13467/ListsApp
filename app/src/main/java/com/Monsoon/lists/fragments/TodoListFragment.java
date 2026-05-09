@@ -53,7 +53,7 @@ private TodoListAdapter adapter;
 
             @Override
             public void onItemLongClick(TodoItem item) {
-                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.BASIC_LIST_SELECT_MODE);
+                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.TODO_LIST_SELECT_MODE);
                 adapter.changeSelectMode(true);
                 adapter.notifyDataSetChanged();
             }
