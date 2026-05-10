@@ -17,33 +17,34 @@ import com.Monsoon.lists.ListItems.MealDay;
 import com.Monsoon.lists.Lists.MealPlan;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.enums.Meal;
+import com.Monsoon.lists.listeners.onListItemClickedListener;
 
 
 import java.time.format.DateTimeFormatter;
 
-public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.ViewHolder> {
+public class MealPlanAdapter extends AbstractListAdapter<MealPlan, MealDay, MealPlanAdapter.ViewHolder> {
 
     //TODO: add on long click listener
-    public interface OnItemClickListener {
+    public interface OnItemClickListener extends onListItemClickedListener<MealDay> {
         void onDayClick(MealDay item);
         void onMealClick(MealDay item, Meal type);
     }
-    MealPlan data;
-    MealPlanAdapter.OnItemClickListener listener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView dateText, breakfastText, lunchText, dinnerText;
+    public class ViewHolder extends ListsViewHolder<MealDay>{
+        TextView breakfastText, lunchText, dinnerText;
         public ViewHolder(View itemView){
             super(itemView);
-            dateText = itemView.findViewById(R.id.date_text);
+            textContent = itemView.findViewById(R.id.date_text);
             breakfastText = itemView.findViewById(R.id.breakfast_text);
             lunchText = itemView.findViewById(R.id.lunch_text);
             dinnerText = itemView.findViewById(R.id.dinner_text);
         }
-        public void bind(final MealDay item, final MealPlanAdapter.OnItemClickListener listener) {
+
+        @Override
+        public void bind(MealDay item, onListItemClickedListener<MealDay> listener) {
             StringBuilder sb = new StringBuilder();
             sb.append(item.getDayOfWeek().label).append(": ").append(item.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
-            dateText.setText(sb.toString());
+            textContent.setText(sb.toString());
             sb = new StringBuilder();
             sb.append(Meal.BREAKFAST.label).append(": ").append(item.getMeals()[Meal.BREAKFAST.index]);
             breakfastText.setText(sb.toString());
@@ -54,36 +55,37 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.ViewHo
             sb.append(Meal.DINNER.label).append(": ").append(item.getMeals()[Meal.DINNER.index]);
             dinnerText.setText(sb.toString());
 
-            dateText.setOnClickListener(new View.OnClickListener() {
+            textContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onDayClick(item);
+                    ((MealPlanAdapter.OnItemClickListener)listener).onDayClick(item);
                 }
             });
             breakfastText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onMealClick(item, Meal.BREAKFAST);
+                    ((MealPlanAdapter.OnItemClickListener)listener).onMealClick(item, Meal.BREAKFAST);
                 }
             });
+
             lunchText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onMealClick(item, Meal.LUNCH);
+                    ((MealPlanAdapter.OnItemClickListener)listener).onMealClick(item, Meal.LUNCH);
                 }
             });
             dinnerText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onMealClick(item, Meal.DINNER);
+                    ((MealPlanAdapter.OnItemClickListener)listener).onMealClick(item, Meal.DINNER);
                 }
             });
         }
+
     }
 
     public MealPlanAdapter(MealPlan data, MealPlanAdapter.OnItemClickListener listener){
-        this.data = data;
-        this.listener = listener;
+        super(data, listener);
     }
 
     @NonNull
@@ -98,9 +100,8 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MealDay currentItem = (MealDay) data.getList().get(position);
-        holder.bind(currentItem, listener);
+    protected MealDay getCurrentItem(int position) {
+        return (MealDay) data.getList().get(position);
     }
 
     @Override

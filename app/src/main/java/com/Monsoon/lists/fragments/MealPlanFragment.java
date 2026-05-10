@@ -48,6 +48,16 @@ private FragmentMealPlanBinding binding;
         MealPlanAdapter adapter = new MealPlanAdapter(mealPlan, new MealPlanAdapter.OnItemClickListener() {
 
             @Override
+            public void onItemClick(MealDay item) {
+
+            }
+
+            @Override
+            public void onItemLongClick(MealDay item) {
+
+            }
+
+            @Override
             public void onDayClick(MealDay item) {
 
             }

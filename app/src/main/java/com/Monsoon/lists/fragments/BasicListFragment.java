@@ -16,6 +16,7 @@ import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.databinding.BasicListFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.onListItemClickedListener;
 
 public class BasicListFragment extends Fragment implements OnMenuItemPressed {
 
@@ -42,8 +43,7 @@ private BasicList list;
         ((MainActivity)getActivity()).changeToolbarTitle(list.getName());
         ((MainActivity)getActivity()).setMenuListener(this);
         binding.basicListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BasicListAdapter(list, new BasicListAdapter.OnItemClickListener(){
-
+        adapter = new BasicListAdapter(list, new onListItemClickedListener<BaseListItem>() {
             @Override
             public void onItemClick(BaseListItem item) {
 

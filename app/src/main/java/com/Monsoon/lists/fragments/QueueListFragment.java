@@ -19,6 +19,7 @@ import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.QueueListFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.onListItemClickedListener;
 import com.google.android.material.snackbar.Snackbar;
 
 public class QueueListFragment extends Fragment {
@@ -46,18 +47,15 @@ private QueueList list;
         ((MainActivity)getActivity()).changeToolbarTitle(list.getName());
         ((MainActivity)getActivity()).onMenuContextChanged(MenuState.QUEUE_LIST_NORMAL);
         binding.queueListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new QueueListAdapter(list, new QueueListAdapter.OnItemClickListener(){
-
+        adapter = new QueueListAdapter(list, new onListItemClickedListener<QueueItem>() {
             @Override
             public void onItemClick(QueueItem item) {
 
             }
 
             @Override
-            public void onItemLongClick(BaseListItem item) {
-                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.BASIC_LIST_SELECT_MODE);
-                adapter.changeSelectMode(true);
-                adapter.notifyDataSetChanged();
+            public void onItemLongClick(QueueItem item) {
+
             }
         });
         binding.queueListView.setAdapter(adapter);
