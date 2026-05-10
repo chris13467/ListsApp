@@ -29,6 +29,7 @@ import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.enums.Meal;
+import com.Monsoon.lists.listeners.onListItemClickedListener;
 
 
 public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.ViewHolder> {
@@ -58,7 +59,7 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
             listPreview.setLayoutManager(new LinearLayoutManager(listPreview.getContext()));
             switch (item.getListType()){
                 case Constants.BASIC:
-                    BasicListAdapter basicListAdapter = new BasicListAdapter((BasicList) item, new BasicListAdapter.OnItemClickListener() {
+                    BasicListAdapter basicListAdapter = new BasicListAdapter((BasicList) item, new onListItemClickedListener<BaseListItem>() {
                         @Override
                         public void onItemClick(BaseListItem item_b) {
                             listener.onItemClick(item);
@@ -103,10 +104,6 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
                     listener.onItemClick(item);
                 }
             });
-        }
-
-        public void bindSelectMode(final baseList item, final OnItemClickListener listener){
-
         }
 
     }

@@ -13,12 +13,12 @@ import com.Monsoon.lists.Adapters.BasicListAdapter;
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.MainActivity;
-import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.databinding.BasicListFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
 
-public class BasicListFragment extends Fragment implements OnMenuItemPressed {
+public class AbstractListFragment extends Fragment implements OnMenuItemPressed {
 
 private BasicListFragmentBinding binding;
 private BasicListAdapter adapter;
@@ -55,6 +55,7 @@ private BasicList list;
                 adapter.changeSelectMode(true);
                 adapter.notifyDataSetChanged();
             }
+
         });
         binding.basicListView.setAdapter(adapter);
 
