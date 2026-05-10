@@ -19,7 +19,7 @@ import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
 
-public abstract class AbstractListAdapter<L, I, VH extends ListsViewHolder<I>> extends RecyclerView.Adapter<VH> {
+public abstract class AbstractListAdapter<L, I extends BaseListItem, VH extends ListsViewHolder<I>> extends RecyclerView.Adapter<VH> {
 
     protected L data;
     protected onListItemClickedListener<I> listener;

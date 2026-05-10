@@ -13,7 +13,7 @@ import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
 
-public abstract class ListsViewHolder<I> extends RecyclerView.ViewHolder {
+public abstract class ListsViewHolder<I extends BaseListItem> extends RecyclerView.ViewHolder {
     protected TextView textContent;
     protected FrameLayout overlay;
 
@@ -24,7 +24,7 @@ public abstract class ListsViewHolder<I> extends RecyclerView.ViewHolder {
     public abstract void bind(final I item, final onListItemClickedListener<I> listener);
 
 
-    protected void setUniversalViewBinding(BaseListItem item, onListItemClickedListener<BaseListItem> listener, boolean isSelectMode){
+    protected void setUniversalViewBinding(I item, onListItemClickedListener<I> listener, boolean isSelectMode){
         if (isSelectMode) overlay.setVisibility(View.VISIBLE);
         else item.setSelected(false);
         selectButton.setChecked(item.isSelected());
