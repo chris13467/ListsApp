@@ -85,6 +85,16 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
                 case Constants.MEAL_PLAN:
                     MealPlanAdapter mealPlanAdapter = new MealPlanAdapter((MealPlan) item, new MealPlanAdapter.OnItemClickListener() {
                         @Override
+                        public void onItemClick(MealDay item) {
+
+                        }
+
+                        @Override
+                        public void onItemLongClick(MealDay item) {
+
+                        }
+
+                        @Override
                         public void onDayClick(MealDay item_mp) {
                             listener.onItemClick(item);
                         }
