@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 
 
@@ -18,13 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.ListItems.MealDay;
-import com.Monsoon.lists.ListItems.QueueItem;
-import com.Monsoon.lists.ListItems.TodoItem;
 import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.Lists.ListOfLists;
 import com.Monsoon.lists.Lists.MealPlan;
-import com.Monsoon.lists.Lists.QueueList;
-import com.Monsoon.lists.Lists.TodoList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.R;
@@ -41,7 +36,7 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
     OnItemClickListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView listNameView; //TODO: add timestamp
+        TextView listNameView;
         RecyclerView listPreview;
         CardView cardView;
 
@@ -54,8 +49,7 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
 
         public void bind(final baseList item, final OnItemClickListener listener) {
             listNameView.setText(item.getName());
-            //TODO: add timestamp
-            //TODO: add list preview
+
             listPreview.setLayoutManager(new LinearLayoutManager(listPreview.getContext()));
             switch (item.getListType()){
                 case Constants.BASIC:
