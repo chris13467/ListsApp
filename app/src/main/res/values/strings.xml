@@ -28,4 +28,6 @@
     <string name="enter_position">Enter insert Position:</string>
     <string name="enter_meal_date">Enter meal date</string>
     <string name="enter_meal_name">Enter meal name</string>
+    <string name="current_item">Current Item</string>
+    <string name="blank" />
 </resources>

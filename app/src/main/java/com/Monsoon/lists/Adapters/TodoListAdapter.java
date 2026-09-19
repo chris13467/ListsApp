@@ -115,10 +115,11 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
             itemCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    data.toggleCheckedOnItem(item);
                     if (item.isChecked()) todoListView.setPaintFlags(todoListView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     else todoListView.setPaintFlags(todoListView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                     listener.onItemClick(item);
+                    data.toggleCheckedOnItem(item);
+
                 }
             });
         }

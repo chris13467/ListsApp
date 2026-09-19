@@ -35,6 +35,8 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
     ListOfLists data;
     OnItemClickListener listener;
 
+    private boolean isSelectMode;
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView listNameView;
         RecyclerView listPreview;
@@ -63,6 +65,11 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
                         public void onItemLongClick(BaseListItem item) {
 
                         }
+
+                        @Override
+                        public void onItemSelected(BaseListItem item) {
+
+                        }
                     });
                     listPreview.setAdapter(basicListAdapter);
                     break;
@@ -85,6 +92,11 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
 
                         @Override
                         public void onItemLongClick(MealDay item) {
+
+                        }
+
+                        @Override
+                        public void onItemSelected(MealDay item) {
 
                         }
 
@@ -115,6 +127,7 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
     public ListOfListsAdapter(ListOfLists data, OnItemClickListener listener) {
         this.data = data;
         this.listener = listener;
+        this.isSelectMode = false;
     }
 
     @NonNull
@@ -138,5 +151,9 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
     @Override
     public int getItemCount() {
         return data.getUserLists().size();
+    }
+
+    public void changeSelectMode(boolean b){
+        this.isSelectMode = b;
     }
 }

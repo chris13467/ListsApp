@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,10 +20,11 @@ import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.ListOfListsFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.OnMenuItemPressed;
 
 import java.util.Objects;
 
-public class ListOfListsFragment extends Fragment {
+public class ListOfListsFragment extends Fragment implements OnMenuItemPressed {
 
 private ListOfListsFragmentBinding binding;
 private ListOfListsAdapter adapter;
@@ -39,6 +41,12 @@ private ListOfListsAdapter adapter;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
         ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
         binding.ListsView.setLayoutManager(new GridLayoutManager(getContext(), Constants.NUM_COLOMNS));
@@ -86,4 +94,13 @@ private ListOfListsAdapter adapter;
         binding = null;
     }
 
+    @Override
+    public void OnBackPressed() {
+
+    }
+
+    @Override
+    public void OnAddPressed() {
+
+    }
 }

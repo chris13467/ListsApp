@@ -38,6 +38,7 @@ public abstract class ListsViewHolder<I extends BaseListItem> extends RecyclerVi
         selectButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                listener.onItemSelected(item);
                 item.setSelected(selectButton.isChecked());
             }
         });

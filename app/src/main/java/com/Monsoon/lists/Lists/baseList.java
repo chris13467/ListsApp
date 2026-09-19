@@ -18,13 +18,13 @@ public abstract class baseList implements Serializable {
     public baseList() {
         name_ = "";
         listType_ = Constants.ABSTRACT;
-        currentItem_ = new BaseListItem();
+        currentItem_ = null;
         isSelected = false;
     }
     public baseList(String name) {
         this.name_ = name;
         listType_ = Constants.ABSTRACT;
-        currentItem_ = new BaseListItem();
+        currentItem_ = null;
         isSelected = false;
     }
 
@@ -52,6 +52,10 @@ public abstract class baseList implements Serializable {
 
     public BaseListItem getCurrentItem(){
         return currentItem_;
+    }
+
+    public void setCurrentItem(BaseListItem item){
+        currentItem_ = item;
     }
 
 
@@ -88,6 +92,18 @@ public abstract class baseList implements Serializable {
     public BaseListItem getRandomItem(){
         Random rand = new Random();
         return items_.get(rand.nextInt(items_.size()));
+    }
+
+    public BaseListItem getNextItem(){
+        return items_.get(0);
+    }
+
+    public int getNumSelected(){
+        int count = 0;
+        for (BaseListItem i : items_){
+            if (i.isSelected()) count++;
+        }
+        return count;
     }
 
 }

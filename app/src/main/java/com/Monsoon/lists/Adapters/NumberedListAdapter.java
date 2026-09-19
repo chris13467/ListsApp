@@ -2,30 +2,21 @@ package com.Monsoon.lists.Adapters;
 
 import static android.content.ContentValues.TAG;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.Monsoon.lists.ListItems.BaseListItem;
-import com.Monsoon.lists.ListItems.QueueItem;
-import com.Monsoon.lists.Lists.BasicList;
-import com.Monsoon.lists.Lists.QueueList;
+import com.Monsoon.lists.ListItems.NumberedItem;
+import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
 
-public class QueueListAdapter extends AbstractListAdapter<QueueList, QueueItem, QueueListAdapter.ViewHolder> {
+public class NumberedListAdapter extends AbstractListAdapter<NumberedList, NumberedItem, NumberedListAdapter.ViewHolder> {
 
 
-    public class ViewHolder extends ListsViewHolder<QueueItem>{
+    public class ViewHolder extends ListsViewHolder<NumberedItem>{
         TextView queueNumberView;
 
         public ViewHolder(View itemView){
@@ -38,8 +29,8 @@ public class QueueListAdapter extends AbstractListAdapter<QueueList, QueueItem, 
         }
 
         @Override
-        public void bind(QueueItem item, onListItemClickedListener<QueueItem> listener) {
-            setUniversalViewBinding(item, listener, false);
+        public void bind(NumberedItem item, onListItemClickedListener<NumberedItem> listener) {
+            setUniversalViewBinding(item, listener, isSelectMode);
             textContent.setText(item.getContents());
             StringBuilder sb = new StringBuilder();
             queueNumberView.setText(sb.append(item.getPosition()+1).toString());
@@ -47,24 +38,24 @@ public class QueueListAdapter extends AbstractListAdapter<QueueList, QueueItem, 
 
     }
 
-    public QueueListAdapter(QueueList data, onListItemClickedListener<QueueItem> listener){
+    public NumberedListAdapter(NumberedList data, onListItemClickedListener<NumberedItem> listener){
         super(data, listener);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        QueueListAdapter.ViewHolder viewHolder = null;
+        NumberedListAdapter.ViewHolder viewHolder = null;
         Log.d(TAG, "Rv_active_Child.." + viewType);
 
-        viewHolder = new QueueListAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).
+        viewHolder = new NumberedListAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.queue_list_item, parent, false));
         return viewHolder;
     }
 
     @Override
-    protected QueueItem getCurrentItem(int position) {
-            return (QueueItem) data.getList().get(position);
+    protected NumberedItem getCurrentItem(int position) {
+            return (NumberedItem) data.getList().get(position);
     }
 
     @Override

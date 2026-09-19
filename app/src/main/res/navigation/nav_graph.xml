@@ -56,9 +56,9 @@
     </fragment>
     <fragment
         android:id="@+id/queue_list_fragment"
-        android:name="com.Monsoon.lists.fragments.QueueListFragment"
+        android:name="com.Monsoon.lists.fragments.NumberedListFragment"
         android:label="@string/queue_list"
-        tools:layout="@layout/queue_list_fragment" >
+        tools:layout="@layout/numbered_list_fragment" >
 
 
         <action

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,11 +20,12 @@ import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.FragmentMealPlanBinding;
 import com.Monsoon.lists.enums.Meal;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.format.DateTimeFormatter;
 
-public class MealPlanFragment extends Fragment {
+public class MealPlanFragment extends Fragment implements OnMenuItemPressed {
 
 private FragmentMealPlanBinding binding;
 
@@ -39,6 +41,12 @@ private FragmentMealPlanBinding binding;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                OnBackPressed();
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
         MealPlan mealPlan = (MealPlan) ((MainActivity)requireActivity()).getUserLists().getCurrentList();
         ((MainActivity)getActivity()).changeToolbarTitle(mealPlan.getName());
@@ -54,6 +62,11 @@ private FragmentMealPlanBinding binding;
 
             @Override
             public void onItemLongClick(MealDay item) {
+
+            }
+
+            @Override
+            public void onItemSelected(MealDay item) {
 
             }
 
@@ -77,4 +90,13 @@ private FragmentMealPlanBinding binding;
         binding = null;
     }
 
+    @Override
+    public void OnAddPressed() {
+
+    }
+
+    @Override
+    public void OnBackPressed() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
+    }
 }

@@ -2,7 +2,6 @@ package com.Monsoon.lists.Adapters;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.res.Resources;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,15 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
-import com.Monsoon.lists.ListItems.QueueItem;
+import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.ListItems.TodoItem;
-import com.Monsoon.lists.Lists.BasicList;
-import com.Monsoon.lists.Lists.TodoList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.R;
 
@@ -54,7 +50,7 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.ViewHold
                     if (((TodoItem)item).isChecked()) basicListView.setPaintFlags(basicListView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     break;
                 case Constants.QUEUE:
-                    sb.append(((QueueItem)item).getPosition() + 1).append(" - ").append(item.getContents());
+                    sb.append(((NumberedItem)item).getPosition() + 1).append(" - ").append(item.getContents());
                     basicListView.setText(sb.toString());
                     break;
             }

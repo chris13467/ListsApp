@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.Lists.ListOfLists;
+import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
@@ -18,9 +18,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.Monsoon.lists.databinding.ActivityMainBinding;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -77,7 +78,14 @@ private OnMenuItemPressed menuListener;
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
     }
-@Override
+
+    @NonNull
+    @Override
+    public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
+        return super.getOnBackInvokedDispatcher();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -88,18 +96,64 @@ private OnMenuItemPressed menuListener;
                     menu.getItem(i).setVisible(false);
                 }
                 break;
-            case BASIC_LIST_SELECT_MODE:
-            case TODO_LIST_SELECT_MODE:
-            case QUEUE_LIST_SELECT_MODE:
-            case LIST_OF_LISTS_SELECT_MODE:
+            case NUMBERED_LIST_ADD_ITEM:
                 menu.getItem(0).setVisible(false);
                 menu.getItem(1).setVisible(true);
+                menu.getItem(2).setVisible(false);
+                menu.getItem(3).setVisible(false);
+                menu.getItem(4).setVisible(false);
+                menu.getItem(5).setVisible(false);
+                menu.getItem(6).setVisible(false);
+                menu.getItem(7).setVisible(false);
+                break;
+            case BASIC_LIST_SELECT_MODE:
+            case LIST_OF_LISTS_SELECT_MODE:
+            case TODO_LIST_SELECT_MODE:
+                menu.getItem(0).setVisible(false);
+                menu.getItem(1).setVisible(true);
+                menu.getItem(2).setVisible(false);
+                menu.getItem(3).setVisible(false);
+                menu.getItem(4).setVisible(false);
+                menu.getItem(5).setVisible(false);
+                menu.getItem(6).setVisible(false);
+                menu.getItem(7).setVisible(false);
+                break;
+            case NUMBERED_LIST_SELECT_MODE:
+                Toast.makeText(this, "NumSelected = " + lists.getCurrentList().getNumSelected(), Toast.LENGTH_SHORT).show();
+                menu.getItem(0).setVisible(false);
+                menu.getItem(1).setVisible(true);
+                menu.getItem(2).setVisible(false);
+                menu.getItem(3).setVisible(false);
+                if (lists.getCurrentList().getNumSelected() == 1) {
+                    menu.getItem(4).setVisible(true);
+                }
+                else menu.getItem(4).setVisible(false);
+                menu.getItem(5).setVisible(true);
+                menu.getItem(6).setVisible(false);
+                menu.getItem(7).setVisible(false);
+                break;
+            case NUMBERED_LIST_NORMAL:
+                menu.getItem(0).setVisible(true);
+                menu.getItem(1).setVisible(false);
+                menu.getItem(2).setVisible(true);
+                menu.getItem(3).setVisible(true);
+                menu.getItem(4).setVisible(false);
+                menu.getItem(5).setVisible(true);
+                if (lists.getCurrentList().getCurrentItem() != null){
+                    menu.getItem(6).setVisible(true);
+                    menu.getItem(7).setVisible(true);
+                }
+
                 break;
             default:
-                for (int i = 0; i < menu.size(); i++){
-                    menu.getItem(i).setVisible(true);
-                }
+                menu.getItem(0).setVisible(true);
                 menu.getItem(1).setVisible(false);
+                menu.getItem(2).setVisible(false);
+                menu.getItem(3).setVisible(false);
+                menu.getItem(4).setVisible(false);
+                menu.getItem(5).setVisible(true);
+                menu.getItem(6).setVisible(false);
+                menu.getItem(7).setVisible(false);
         }
         return true;
     }
@@ -111,26 +165,19 @@ private OnMenuItemPressed menuListener;
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        int currentId = navController.getCurrentDestination().getId();
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
         if (id == R.id.action_add){
-            if (menuState == MenuState.LIST_OF_LISTS_NORMAL){
-                NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.action_add_list);
-            } else {
-                StringBuilder sb = new StringBuilder();
-                NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.action_add_item);
-                changeToolbarTitle(sb.append("Add ").append(getUserLists().getCurrentList().getListType()).append(" Item").toString());
-            }
+            menuListener.OnAddPressed();
         }
 
         if (id == R.id.action_delete){
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-            int currentId = navController.getCurrentDestination().getId();
             navController.popBackStack(currentId, true);
             if (menuState == MenuState.LIST_OF_LISTS_SELECT_MODE){
                 for (int i = lists.getUserLists().size(); i > 0; i--){
@@ -144,7 +191,37 @@ private OnMenuItemPressed menuListener;
             }
             navController.navigate(currentId);
             OnListChange();
+        }
 
+        if (id == R.id.action_get_next){
+
+            lists.getCurrentList().setCurrentItem(lists.getCurrentList().getNextItem());
+            navController.navigate(currentId);
+            OnListChange();
+        }
+
+        if (id == R.id.action_get_random){
+            lists.getCurrentList().setCurrentItem(lists.getCurrentList().getRandomItem());
+            navController.navigate(currentId);
+            OnListChange();
+        }
+
+        if (id == R.id.action_make_current_item){
+            ((NumberedList)lists.getCurrentList()).Make_selected_current();
+            navController.navigate(currentId);
+            OnListChange();
+        }
+
+        if (id == R.id.action_remove_current_item){
+            ((NumberedList)lists.getCurrentList()).removeCurrentItem();
+            navController.navigate(currentId);
+            OnListChange();
+        }
+
+        if (id == R.id.action_readd_current_item){
+            ((NumberedList)lists.getCurrentList()).reAddCurrentItem();
+            navController.navigate(currentId);
+            OnListChange();
         }
 
         return super.onOptionsItemSelected(item);
@@ -156,7 +233,7 @@ private OnMenuItemPressed menuListener;
         switch (menuState){
             case BASIC_LIST_NORMAL:
             case TODO_LIST_NORMAL:
-            case QUEUE_LIST_NORMAL:
+            case NUMBERED_LIST_NORMAL:
             case MEAL_PLAN_NORMAL:
                 navController.navigate(R.id.action_return_to_lists_of_lists);
                 return true;

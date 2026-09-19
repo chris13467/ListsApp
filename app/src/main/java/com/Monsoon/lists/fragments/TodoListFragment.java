@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
@@ -19,9 +21,10 @@ import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.TodoListFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.google.android.material.snackbar.Snackbar;
 
-public class TodoListFragment extends Fragment {
+public class TodoListFragment extends Fragment implements OnMenuItemPressed  {
 
 private TodoListFragmentBinding binding;
 private TodoListAdapter adapter;
@@ -38,6 +41,12 @@ private TodoListAdapter adapter;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                OnBackPressed();
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
         TodoList list = (TodoList) ((MainActivity)getActivity()).getUserLists().getCurrentList();
         ((MainActivity)getActivity()).changeToolbarTitle(list.getName());
@@ -49,6 +58,7 @@ private TodoListAdapter adapter;
             @Override
             public void onItemClick(TodoItem item) {
                 ((MainActivity)requireActivity()).OnListChange();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -60,7 +70,6 @@ private TodoListAdapter adapter;
         });
         binding.todoListView.setAdapter(adapter);
 
-
     }
 
 @Override
@@ -69,4 +78,13 @@ private TodoListAdapter adapter;
         binding = null;
     }
 
+    @Override
+    public void OnAddPressed() {
+
+    }
+
+    @Override
+    public void OnBackPressed() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
+    }
 }

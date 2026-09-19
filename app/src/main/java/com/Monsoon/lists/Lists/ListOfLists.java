@@ -1,18 +1,10 @@
 package com.Monsoon.lists.Lists;
 
 import com.Monsoon.lists.Constants;
-import com.Monsoon.lists.ListItems.BaseListItem;
-import com.Monsoon.lists.ListItems.QueueItem;
-import com.Monsoon.lists.ListItems.TodoItem;
-import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.Settings;
-import com.Monsoon.lists.enums.Frequency;
-import com.Monsoon.lists.enums.Meal;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Set;
 
 public class ListOfLists implements Serializable {
     private ArrayList<baseList> userLists;
@@ -43,7 +35,7 @@ public class ListOfLists implements Serializable {
                 newList = new TodoList();
                 break;
             case Constants.QUEUE:
-                newList = new QueueList();
+                newList = new NumberedList();
                 break;
             case Constants.MEAL_PLAN:
                 newList = new MealPlan(settings.getNumberOfDaysBeforeMealRemoval());
@@ -63,7 +55,7 @@ public class ListOfLists implements Serializable {
                 newList = new TodoList(name);
                 break;
             case Constants.QUEUE:
-                newList = new QueueList(name);
+                newList = new NumberedList(name);
                 break;
             case Constants.MEAL_PLAN:
                 newList = new MealPlan(settings.getNumberOfDaysBeforeMealRemoval());

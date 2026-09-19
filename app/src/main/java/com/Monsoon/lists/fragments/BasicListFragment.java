@@ -5,14 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.Monsoon.lists.Adapters.BasicListAdapter;
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.MainActivity;
+import com.Monsoon.lists.R;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.databinding.BasicListFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
@@ -37,6 +40,12 @@ private BasicList list;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                OnBackPressed();
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
         list = (BasicList) ((MainActivity)getActivity()).getUserLists().getCurrentList();
         ((MainActivity)getActivity()).onMenuContextChanged(MenuState.BASIC_LIST_NORMAL);
@@ -55,6 +64,11 @@ private BasicList list;
                 adapter.changeSelectMode(true);
                 adapter.notifyDataSetChanged();
             }
+
+            @Override
+            public void onItemSelected(BaseListItem item) {
+
+            }
         });
         binding.basicListView.setAdapter(adapter);
 
@@ -67,9 +81,13 @@ private BasicList list;
         binding = null;
     }
 
+    @Override
+    public void OnAddPressed() {
+
+    }
 
     @Override
-    public void OnDeletePressed() {
-
+    public void OnBackPressed() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
     }
 }

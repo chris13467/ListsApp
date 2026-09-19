@@ -1,19 +1,19 @@
 package com.Monsoon.lists.ListItems;
 
-public class QueueItem extends BaseListItem{
+public class NumberedItem extends BaseListItem{
     private int position_;
 
-    public QueueItem(){
+    public NumberedItem(){
         super();
         position_ = 0;
     }
 
-    public  QueueItem(String contents){
+    public NumberedItem(String contents){
         super(contents);
         position_ = 0;
     }
 
-    public QueueItem(String contents, int position){
+    public NumberedItem(String contents, int position){
         super(contents);
         position_ = position;
     }

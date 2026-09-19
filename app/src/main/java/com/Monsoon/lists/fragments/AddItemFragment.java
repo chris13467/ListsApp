@@ -23,13 +23,10 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
-import com.Monsoon.lists.ListItems.MealDay;
-import com.Monsoon.lists.ListItems.QueueItem;
+import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.ListItems.TodoItem;
-import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.Lists.MealPlan;
-import com.Monsoon.lists.Lists.QueueList;
-import com.Monsoon.lists.Lists.TodoList;
+import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
@@ -40,16 +37,11 @@ import com.Monsoon.lists.enums.MenuState;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class AddItemFragment extends Fragment {
 
@@ -231,7 +223,7 @@ public class AddItemFragment extends Fragment {
                         if (content.isBlank()){
                             Toast.makeText(requireContext(), "Item Content cannot be blank!", Toast.LENGTH_SHORT).show();
                         } else {
-                            QueueItem newItem = new QueueItem(content);
+                            NumberedItem newItem = new NumberedItem(content);
                             if (positionSwitch.isChecked()){
                                 String temp = positionInput.getText().toString();
                                 if (temp.isBlank()){
@@ -242,8 +234,8 @@ public class AddItemFragment extends Fragment {
                                         Toast.makeText(requireContext(), "Insert position must be between 1 and " + list.getList().size(), Toast.LENGTH_SHORT).show();
 
                                     } else {
-                                        ((QueueList)list).addItem(newItem, insertPosition - 1);
-                                        ((QueueList)list).reassignPositions();
+                                        ((NumberedList)list).addItem(newItem, insertPosition - 1);
+                                        ((NumberedList)list).reassignPositions();
                                         ((MainActivity)requireActivity()).OnListChange();
                                         NavHostFragment.findNavController(AddItemFragment.this).
                                                 navigate(R.id.action_queue_submit);
