@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.Monsoon.lists.Constants;
-import com.Monsoon.lists.Lists.MealPlan;
 import com.Monsoon.lists.Lists.TodoList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.MainActivity;
@@ -45,7 +44,7 @@ public class AddListFragment extends Fragment {
         String[] options = {
                 Constants.BASIC,
                 Constants.TODO,
-                Constants.QUEUE,
+                Constants.NUMBERED,
                 Constants.MEAL_PLAN
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, options);
@@ -90,29 +89,10 @@ public class AddListFragment extends Fragment {
                         if (name.isBlank()){
                             Toast.makeText(requireContext(), "List name cannot be blank!", Toast.LENGTH_SHORT).show();
                         } else {
-                            list = ((MainActivity)requireActivity()).getUserLists().CreateList(Constants.QUEUE, name);
+                            list = ((MainActivity)requireActivity()).getUserLists().CreateList(Constants.NUMBERED, name);
                             ((MainActivity)requireActivity()).OnListChange();
                             NavHostFragment.findNavController(AddListFragment.this).
                                     navigate(R.id.action_submit);
-                        }
-                        break;
-                    case 3:
-                        requiredEditText = binding.listDetailsBox.findViewById(R.id.days_before_removal_input);
-                        name = requiredEditText.getText().toString();
-                        if (name.isBlank()){
-                            Toast.makeText(requireContext(), "Days before removal must contain a number!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            try {
-                                int daysBeforeRemoval = Integer.parseInt(name);
-                                list = ((MainActivity)requireActivity()).getUserLists().CreateList(Constants.MEAL_PLAN);
-                                ((MealPlan)list).setDaysBeforeRemoval(daysBeforeRemoval);
-                                ((MainActivity)requireActivity()).OnListChange();
-                                NavHostFragment.findNavController(AddListFragment.this).
-                                        navigate(R.id.action_submit);
-                            }
-                            catch (Exception e){
-                                Toast.makeText(requireContext(), "Days before removal must contain a number!", Toast.LENGTH_SHORT).show();
-                            }
                         }
                         break;
                     default:

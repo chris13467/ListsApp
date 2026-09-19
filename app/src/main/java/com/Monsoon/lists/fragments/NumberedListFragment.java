@@ -18,6 +18,7 @@ import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.NumberedListFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.MainActivityCallback;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
 
@@ -26,6 +27,7 @@ public class NumberedListFragment extends Fragment implements OnMenuItemPressed 
 private NumberedListFragmentBinding binding;
 private NumberedListAdapter adapter;
 private NumberedList list;
+private MainActivityCallback mainActivityCallback;
 
 
 
@@ -48,10 +50,11 @@ private NumberedList list;
             }
         });
         super.onViewCreated(view, savedInstanceState);
-        list = (NumberedList) ((MainActivity)requireActivity()).getUserLists().getCurrentList();
-        ((MainActivity)requireActivity()).changeToolbarTitle(list.getName());
-        ((MainActivity)requireActivity()).setMenuListener(this);
-        ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
+        mainActivityCallback = ((MainActivity)requireActivity());
+        list = (NumberedList) mainActivityCallback.getUserLists().getCurrentList();
+        mainActivityCallback.changeToolbarTitle(list.getName());
+        mainActivityCallback.setMenuListener(this);
+        mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
         binding.queueListView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new NumberedListAdapter(list, new onListItemClickedListener<NumberedItem>() {
             @Override
@@ -61,14 +64,14 @@ private NumberedList list;
 
             @Override
             public void onItemLongClick(NumberedItem item) {
-                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.NUMBERED_LIST_SELECT_MODE);
+                mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_SELECT_MODE);
                 adapter.changeSelectMode(true);
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onItemSelected(NumberedItem item) {
-                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.NUMBERED_LIST_SELECT_MODE);
+                mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_SELECT_MODE);
             }
         });
         binding.queueListView.setAdapter(adapter);
@@ -92,6 +95,28 @@ private NumberedList list;
     @Override
     public void OnAddPressed() {
         binding.numberedItemAdd.setVisibility(View.VISIBLE);
-        ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.NUMBERED_LIST_ADD_ITEM);
+        binding.numberedItemAdd.requestFocus();
+        mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_ADD_ITEM);
+    }
+
+    @Override
+    public void OnDonePressed() {
+        list.addItem(new NumberedItem(binding.queueItemContentInput.getText().toString()));
+        adapter.notifyDataSetChanged();
+        binding.numberedItemAdd.setVisibility(View.GONE);
+        mainActivityCallback.OnListChange();
+        mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
+    }
+
+    @Override
+    public void OnDeletePressed() {
+        switch (mainActivityCallback.getMenuState()){
+            case NUMBERED_LIST_ADD_ITEM:
+                mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
+                binding.numberedItemAdd.setVisibility(View.GONE);
+                break;
+            default:
+
+        }
     }
 }

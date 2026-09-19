@@ -34,11 +34,8 @@ public class ListOfLists implements Serializable {
             case Constants.TODO:
                 newList = new TodoList();
                 break;
-            case Constants.QUEUE:
+            case Constants.NUMBERED:
                 newList = new NumberedList();
-                break;
-            case Constants.MEAL_PLAN:
-                newList = new MealPlan(settings.getNumberOfDaysBeforeMealRemoval());
                 break;
             default:
                 newList = new BasicList();
@@ -54,11 +51,8 @@ public class ListOfLists implements Serializable {
             case Constants.TODO:
                 newList = new TodoList(name);
                 break;
-            case Constants.QUEUE:
+            case Constants.NUMBERED:
                 newList = new NumberedList(name);
-                break;
-            case Constants.MEAL_PLAN:
-                newList = new MealPlan(settings.getNumberOfDaysBeforeMealRemoval());
                 break;
             default:
                 newList = new BasicList(name);
@@ -91,7 +85,6 @@ public class ListOfLists implements Serializable {
 
     public static ListOfLists getListFirstOnFirstLoad(Settings settings){
         ListOfLists lists = new ListOfLists(settings);
-        MealPlan mealPlan = (MealPlan) lists.CreateList(Constants.MEAL_PLAN);
         return lists;
     }
 

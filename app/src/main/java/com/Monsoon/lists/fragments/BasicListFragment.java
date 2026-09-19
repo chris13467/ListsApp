@@ -87,6 +87,16 @@ private BasicList list;
     }
 
     @Override
+    public void OnDonePressed() {
+
+    }
+
+    @Override
+    public void OnDeletePressed() {
+
+    }
+
+    @Override
     public void OnBackPressed() {
         NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
     }

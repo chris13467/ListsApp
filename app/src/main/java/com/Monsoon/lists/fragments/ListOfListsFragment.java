@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -21,8 +20,6 @@ import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.ListOfListsFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
-
-import java.util.Objects;
 
 public class ListOfListsFragment extends Fragment implements OnMenuItemPressed {
 
@@ -51,6 +48,7 @@ private ListOfListsAdapter adapter;
         ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
         binding.ListsView.setLayoutManager(new GridLayoutManager(getContext(), Constants.NUM_COLOMNS));
         ListOfLists userLists = ((MainActivity) requireActivity()).getUserLists();
+        ((MainActivity)requireActivity()).setMenuListener(this);
         adapter = new ListOfListsAdapter(userLists, new ListOfListsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(baseList item) {
@@ -65,7 +63,7 @@ private ListOfListsAdapter adapter;
                         NavHostFragment.findNavController(ListOfListsFragment.this).
                                 navigate(R.id.action_load_todo_list);
                         break;
-                    case Constants.QUEUE:
+                    case Constants.NUMBERED:
                         NavHostFragment.findNavController(ListOfListsFragment.this).
                                 navigate(R.id.action_load_queue_list);
                         break;
@@ -101,6 +99,18 @@ private ListOfListsAdapter adapter;
 
     @Override
     public void OnAddPressed() {
+        ((MainActivity)requireActivity()).getUserLists().CreateList(Constants.NUMBERED, "Test Numbered List");
+        ((MainActivity)requireActivity()).OnListChange();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void OnDonePressed() {
+
+    }
+
+    @Override
+    public void OnDeletePressed() {
 
     }
 }

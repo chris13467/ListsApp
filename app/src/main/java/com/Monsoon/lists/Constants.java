@@ -4,7 +4,7 @@ public class Constants {
     public static final String ABSTRACT = "Abstract";
     public static final String TODO = "Todo";
     public static final String MEAL_PLAN = "Meal Plan";
-    public static final String QUEUE = "Queue";
+    public static final String NUMBERED = "Numbered";
     public static final String BASIC = "Basic";
     public static final String BREAKFAST = "Breakfast";
     public static final String LUNCH  = "Lunch";

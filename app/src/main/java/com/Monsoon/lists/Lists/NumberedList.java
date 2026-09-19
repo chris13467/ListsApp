@@ -10,12 +10,12 @@ public class NumberedList extends baseList {
     public NumberedList(){
         super();
         items_ = new LinkedList<>();
-        listType_ = Constants.QUEUE;
+        listType_ = Constants.NUMBERED;
     }
     public NumberedList(String name){
         super(name);
         items_ = new LinkedList<>();
-        listType_ = Constants.QUEUE;
+        listType_ = Constants.NUMBERED;
     }
 
 

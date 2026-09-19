@@ -25,14 +25,12 @@ import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.ListItems.TodoItem;
-import com.Monsoon.lists.Lists.MealPlan;
 import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.FragmentAddItemBinding;
 import com.Monsoon.lists.enums.Frequency;
-import com.Monsoon.lists.enums.Meal;
 import com.Monsoon.lists.enums.MenuState;
 
 import java.text.ParseException;
@@ -126,7 +124,7 @@ public class AddItemFragment extends Fragment {
                     }
                 });
                 break;
-            case Constants.QUEUE:
+            case Constants.NUMBERED:
                 binding.itemDetailsBox.setDisplayedChild(2);
                 itemView = binding.itemDetailsBox.getCurrentView();
                 positionSwitch = itemView.findViewById(R.id.position_switch);
@@ -137,31 +135,6 @@ public class AddItemFragment extends Fragment {
                         positionInput.setEnabled(b);
                     }
                 });
-                break;
-            case Constants.MEAL_PLAN:
-                binding.itemDetailsBox.setDisplayedChild(3);
-                itemView = binding.itemDetailsBox.getCurrentView();
-                ArrayAdapter<String> mpAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, Meal.getLabels());
-                mpAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                mealType = itemView.findViewById(R.id.meal_type);
-                mealDate = itemView.findViewById(R.id.date_input);
-                mealType.setAdapter(mpAdapter);
-                mealDate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View Eview) {
-                        final Calendar c = Calendar.getInstance();
-                        int year = c.get(Calendar.YEAR);
-                        int month = c.get(Calendar.MONTH);
-                        int day = c.get(Calendar.DAY_OF_MONTH);
-
-                        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
-                                (view, year1, monthOfYear, dayOfMonth) -> {
-                                    mealDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year1);
-                                }, year, month, day);
-                        datePickerDialog.show();
-                    }
-                });
-
                 break;
             default:
                 binding.itemDetailsBox.setDisplayedChild(0);
@@ -217,7 +190,7 @@ public class AddItemFragment extends Fragment {
                         }
 
                         break;
-                    case Constants.QUEUE:
+                    case Constants.NUMBERED:
                         contentView = itemView.findViewById(R.id.queue_item_content_input);
                         content = contentView.getText().toString();
                         if (content.isBlank()){
@@ -251,30 +224,6 @@ public class AddItemFragment extends Fragment {
 
 
                         }
-                        break;
-                    case Constants.MEAL_PLAN:
-                        contentView = itemView.findViewById(R.id.meal_name_input);
-                        content = contentView.getText().toString();
-                        if (content.isBlank()){
-                            Toast.makeText(requireContext(), "Meal name cannot be blank!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (mealDate.getText().toString().equals(getString(R.string.enter_meal_date))){
-                                Toast.makeText(requireContext(), "Meal date must be selected!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                try {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
-                                    Date t = sdf.parse(mealDate.getText().toString());
-                                    ((MealPlan)list).addMeal(content, t.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), Meal.getMealByLabel(mealType.getSelectedItem().toString()));
-                                    ((MainActivity)requireActivity()).OnListChange();
-                                    NavHostFragment.findNavController(AddItemFragment.this).
-                                            navigate(R.id.action_meal_plan_submit);
-                                } catch (ParseException e) {
-                                    Toast.makeText(requireContext(), "End be in mm/dd/yyyy format!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                        }
-
                         break;
                     default:
                         contentView = itemView.findViewById(R.id.basic_item_content_input);

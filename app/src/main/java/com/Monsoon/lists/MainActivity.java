@@ -8,6 +8,7 @@ import com.Monsoon.lists.Lists.ListOfLists;
 import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.listeners.MainActivityCallback;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
 
 import androidx.annotation.NonNull;
@@ -33,7 +34,7 @@ import java.io.Serializable;
 //TODO: make dimentions based on screen size
 //TODO: make Themes and implement them
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityCallback {
 
     private AppBarConfiguration appBarConfiguration;
 private ActivityMainBinding binding;
@@ -99,12 +100,13 @@ private OnMenuItemPressed menuListener;
             case NUMBERED_LIST_ADD_ITEM:
                 menu.getItem(0).setVisible(false);
                 menu.getItem(1).setVisible(true);
-                menu.getItem(2).setVisible(false);
+                menu.getItem(2).setVisible(true);
                 menu.getItem(3).setVisible(false);
                 menu.getItem(4).setVisible(false);
                 menu.getItem(5).setVisible(false);
                 menu.getItem(6).setVisible(false);
                 menu.getItem(7).setVisible(false);
+                menu.getItem(8).setVisible(false);
                 break;
             case BASIC_LIST_SELECT_MODE:
             case LIST_OF_LISTS_SELECT_MODE:
@@ -135,10 +137,13 @@ private OnMenuItemPressed menuListener;
             case NUMBERED_LIST_NORMAL:
                 menu.getItem(0).setVisible(true);
                 menu.getItem(1).setVisible(false);
-                menu.getItem(2).setVisible(true);
-                menu.getItem(3).setVisible(true);
+                menu.getItem(2).setVisible(false);
+                menu.getItem(3).setVisible(false);
                 menu.getItem(4).setVisible(false);
-                menu.getItem(5).setVisible(true);
+                menu.getItem(5).setVisible(false);
+                menu.getItem(6).setVisible(false);
+                menu.getItem(7).setVisible(false);
+                menu.getItem(8).setVisible(false);
                 if (lists.getCurrentList().getCurrentItem() != null){
                     menu.getItem(6).setVisible(true);
                     menu.getItem(7).setVisible(true);
@@ -177,20 +182,12 @@ private OnMenuItemPressed menuListener;
             menuListener.OnAddPressed();
         }
 
+        if (id == R.id.action_done){
+            menuListener.OnDonePressed();
+        }
+
         if (id == R.id.action_delete){
-            navController.popBackStack(currentId, true);
-            if (menuState == MenuState.LIST_OF_LISTS_SELECT_MODE){
-                for (int i = lists.getUserLists().size(); i > 0; i--){
-                    baseList currentList = lists.getUserLists().get(i - 1);
-                    if (currentList.isSelected()) lists.removeList(currentList);
-                }
-            } else {
-                for (int i = lists.getCurrentList().getList().size(); i > 0; i--){
-                    if (lists.getCurrentList().getList().get(i - 1).isSelected()) lists.getCurrentList().removeItem(i-1);
-                }
-            }
-            navController.navigate(currentId);
-            OnListChange();
+           menuListener.OnDeletePressed();
         }
 
         if (id == R.id.action_get_next){
@@ -218,7 +215,7 @@ private OnMenuItemPressed menuListener;
             OnListChange();
         }
 
-        if (id == R.id.action_readd_current_item){
+        if (id == R.id.action_read_current_item){
             ((NumberedList)lists.getCurrentList()).reAddCurrentItem();
             navController.navigate(currentId);
             OnListChange();
@@ -242,31 +239,41 @@ private OnMenuItemPressed menuListener;
                 || super.onSupportNavigateUp();
     }
 
+    @Override
     public Settings getSettings(){
         return settings;
     }
 
+    @Override
     public ListOfLists getUserLists(){
         return lists;
     }
 
+    @Override
+    public MenuState getMenuState() {
+        return this.menuState;
+    }
+
+    @Override
     public void OnListChange(){
         lists.moveCurrentListToFront();
         SaveData(lists, Constants.LIST_FILE_NAME);
     }
 
+    @Override
     public void onMenuContextChanged(MenuState menuState){
         this.menuState = menuState;
         invalidateMenu();
     }
 
-
+    @Override
     public void changeToolbarTitle(@NonNull String title){
         try{
             getSupportActionBar().setTitle(title);
         } catch (NullPointerException ignored){}
     }
 
+    @Override
     public void setMenuListener(OnMenuItemPressed listener){
         menuListener = listener;
     }

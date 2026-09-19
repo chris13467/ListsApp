@@ -49,7 +49,7 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.ViewHold
                     basicListView.setText(item.getContents());
                     if (((TodoItem)item).isChecked()) basicListView.setPaintFlags(basicListView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     break;
-                case Constants.QUEUE:
+                case Constants.NUMBERED:
                     sb.append(((NumberedItem)item).getPosition() + 1).append(" - ").append(item.getContents());
                     basicListView.setText(sb.toString());
                     break;
