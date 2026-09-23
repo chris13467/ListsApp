@@ -23,8 +23,6 @@ public class NumberedListAdapter extends AbstractListAdapter<NumberedList, Numbe
             super(itemView);
             textContent = itemView.findViewById(R.id.queue_item_text);
             queueNumberView = itemView.findViewById(R.id.queue_number_view);
-            overlay = itemView.findViewById(R.id.queue_overlay);
-            selectButton = itemView.findViewById(R.id.selected_radio_queue);
 
         }
 
@@ -58,10 +56,10 @@ public class NumberedListAdapter extends AbstractListAdapter<NumberedList, Numbe
             return (NumberedItem) data.getList().get(position);
     }
 
+
     @Override
     public int getItemCount() {
         return data.getList().size();
     }
-
 
 }

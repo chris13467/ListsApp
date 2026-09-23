@@ -100,4 +100,29 @@ private BasicList list;
     public void OnBackPressed() {
         NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
     }
+
+    @Override
+    public void OnRandomizePressed() {
+
+    }
+
+    @Override
+    public void OnEditPressed() {
+
+    }
+
+    @Override
+    public void OnMoveToFrontPressed() {
+
+    }
+
+    @Override
+    public void OnMoveToBackPressed() {
+
+    }
+
+    @Override
+    public void OnRandomToFront() {
+
+    }
 }

@@ -98,6 +98,31 @@ private ListOfListsAdapter adapter;
     }
 
     @Override
+    public void OnRandomizePressed() {
+
+    }
+
+    @Override
+    public void OnEditPressed() {
+
+    }
+
+    @Override
+    public void OnMoveToFrontPressed() {
+
+    }
+
+    @Override
+    public void OnMoveToBackPressed() {
+
+    }
+
+    @Override
+    public void OnRandomToFront() {
+
+    }
+
+    @Override
     public void OnAddPressed() {
         ((MainActivity)requireActivity()).getUserLists().CreateList(Constants.NUMBERED, "Test Numbered List");
         ((MainActivity)requireActivity()).OnListChange();

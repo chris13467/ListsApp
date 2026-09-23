@@ -59,4 +59,15 @@ public class Constants {
     public static final String FIRST_OPEN = "isFirstOpen";
 
     public static final String SHARED_PREFRENCES = "ListPrefs";
+
+
+    public static final int MENU_ADD = 0;
+    public static final int MENU_DONE = 1;
+    public static final int MENU_EDIT = 2;
+    public static final int MENU_DELETE = 3;
+    public static final int MENU_MOVE_TO_FRONT = 4;
+    public static final int MENU_MOVE_TO_BACK = 5;
+    public static final int MENU_RANDOM_TO_FRONT = 6;
+    public static final int MENU_RANDOMIZE = 7;
+    public static final int MENU_SETTINGS = 8;
 }

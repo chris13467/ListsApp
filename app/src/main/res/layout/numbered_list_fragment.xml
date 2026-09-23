@@ -21,17 +21,30 @@
            android:layout_height="wrap_content"
            android:visibility="gone">
 
+           <TextView
+               android:id="@+id/new_list_number"
+               android:text="1"
+               android:paddingStart="24dp"
+               android:paddingEnd="16dp"
+               android:paddingTop="8dp"
+               android:paddingBottom="8dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               app:layout_constraintEnd_toStartOf="@id/numbered_item_content_input"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"/>
            <EditText
-               android:id="@+id/queue_item_content_input"
+               android:id="@+id/numbered_item_content_input"
                android:layout_width="0dp"
-               android:layout_height="150dp"
+               android:layout_height="wrap_content"
                android:layout_marginStart="24dp"
                android:layout_marginEnd="24dp"
                android:autofillHints="NONE"
+               android:inputType="text"
                android:hint="@string/enter_item_content"
-               android:inputType="textMultiLine"
                app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintStart_toEndOf="@id/new_list_number"
                app:layout_constraintTop_toTopOf="parent"
                app:layout_constraintBottom_toBottomOf="parent"/>
 

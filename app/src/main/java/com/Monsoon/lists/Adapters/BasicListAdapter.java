@@ -31,9 +31,6 @@ public class BasicListAdapter extends AbstractListAdapter<BasicList, BaseListIte
         public ViewHolder(View itemView) {
             super(itemView);
             textContent = itemView.findViewById(R.id.basic_item_text);
-            overlay = itemView.findViewById(R.id.basic_overlay);
-            selectButton = itemView.findViewById(R.id.selected_radio);
-
         }
 
         @Override

@@ -8,7 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <EditText
-        android:id="@+id/queue_item_content_input"
+        android:id="@+id/numbered_item_content_input"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginStart="24dp"
@@ -28,7 +28,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:text="@string/insert_position"
-        app:layout_constraintTop_toBottomOf="@id/queue_item_content_input"
+        app:layout_constraintTop_toBottomOf="@id/numbered_item_content_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/position_input"/>

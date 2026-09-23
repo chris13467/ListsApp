@@ -191,7 +191,7 @@ public class AddItemFragment extends Fragment {
 
                         break;
                     case Constants.NUMBERED:
-                        contentView = itemView.findViewById(R.id.queue_item_content_input);
+                        contentView = itemView.findViewById(R.id.numbered_item_content_input);
                         content = contentView.getText().toString();
                         if (content.isBlank()){
                             Toast.makeText(requireContext(), "Item Content cannot be blank!", Toast.LENGTH_SHORT).show();

@@ -50,12 +50,13 @@ public abstract class baseList implements Serializable {
         return items_;
     }
 
-    public BaseListItem getCurrentItem(){
-        return currentItem_;
-    }
-
-    public void setCurrentItem(BaseListItem item){
-        currentItem_ = item;
+    public BaseListItem getSelected(){
+        for (BaseListItem i : items_){
+            if (i.isSelected()) {
+                return i;
+            }
+        }
+        return new BaseListItem();
     }
 
 
@@ -104,6 +105,18 @@ public abstract class baseList implements Serializable {
             if (i.isSelected()) count++;
         }
         return count;
+    }
+
+    public void deleteSelected(){
+        for (int i = items_.size() - 1; i >= 0; i--){
+            if (items_.get(i).isSelected()) removeItem(i);
+        }
+    }
+
+    public void clearSelections(){
+        for (BaseListItem i : items_){
+            i.setSelected(false);
+        }
     }
 
 }

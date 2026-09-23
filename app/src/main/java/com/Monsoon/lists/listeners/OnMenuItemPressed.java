@@ -6,4 +6,9 @@ public interface OnMenuItemPressed {
     public void OnDonePressed();
     public void OnDeletePressed();
     public void OnBackPressed();
+    public void OnRandomizePressed();
+    public void OnEditPressed();
+    public void OnMoveToFrontPressed();
+    public void OnMoveToBackPressed();
+    public void OnRandomToFront();
 }

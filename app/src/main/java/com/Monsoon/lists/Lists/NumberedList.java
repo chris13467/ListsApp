@@ -4,7 +4,9 @@ import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.ListItems.NumberedItem;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class NumberedList extends baseList {
     public NumberedList(){
@@ -18,13 +20,18 @@ public class NumberedList extends baseList {
         listType_ = Constants.NUMBERED;
     }
 
-
-
     public void reassignPositions(){
         for (int i = 0; i < items_.size(); i++){
             ((NumberedItem)items_.get(i)).setPosition(i);
         }
     }
+
+    @Override
+    public void deleteSelected() {
+        super.deleteSelected();
+        reassignPositions();
+    }
+
     //overrides
     @Override
     public void addItem(BaseListItem item) {
@@ -33,8 +40,9 @@ public class NumberedList extends baseList {
     }
 
     public void addItem(BaseListItem item, int position){
-        ((NumberedItem)item).setPosition(items_.size());
-        items_.add(position, item);
+        ((NumberedItem)item).setPosition(position);
+        items_.add(position - 1, item);
+        reassignPositions();
     }
 
     @Override
@@ -58,46 +66,16 @@ public class NumberedList extends baseList {
         return false;
     }
 
-    @Override
-    public BaseListItem getRandomItem() {
-        BaseListItem rand = super.getRandomItem();
-        removeItem(rand);
-        return rand;
-    }
-    @Override
-    public BaseListItem getNextItem() {
-        NumberedItem temp = (NumberedItem)items_.get(0);
-        items_.remove(0);
-        return temp;
-    }
-
-    public void Make_selected_current(){
-        NumberedItem selected = null;
-        if (getNumSelected() == 1){
-            for (int i = 0; i < items_.size(); i++){
-                selected = (NumberedItem) items_.get(i);
-                if (selected.isSelected()) break;
+    public void Randomize(int numPasses){
+        Random rand = new Random();
+        for (int j = 0; j < numPasses; j++) {
+            for (int i = 0; i < items_.size(); i++) {
+                int newPos = rand.nextInt(items_.size());
+                Collections.swap(items_, i, newPos);
             }
-            setCurrentItem(selected);
         }
-    }
-
-    @Override
-    public void setCurrentItem(BaseListItem item) {
-        currentItem_ = item;
-        removeItem(item);
-    }
-
-    public void reAddCurrentItem(){
-        addItem(currentItem_, ((NumberedItem)currentItem_).getPosition());
-        currentItem_ = null;
         reassignPositions();
     }
-
-    public void removeCurrentItem(){
-        currentItem_ = null;
-    }
-
 
 
 }

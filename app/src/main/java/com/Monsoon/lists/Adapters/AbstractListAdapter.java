@@ -16,8 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.Lists.BasicList;
+import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public abstract class AbstractListAdapter<L, I extends BaseListItem, VH extends ListsViewHolder<I>> extends RecyclerView.Adapter<VH> {
 
@@ -40,6 +44,22 @@ public abstract class AbstractListAdapter<L, I extends BaseListItem, VH extends 
     }
     public void changeSelectMode(boolean b){
         this.isSelectMode = b;
+    }
+
+    public void onItemMove(int fromPosition, int toPosition){
+        if (data instanceof baseList){
+            if (fromPosition < toPosition){
+                for (int i = fromPosition; i < toPosition; i++){
+                    Collections.swap(((baseList) data).getList(), i, i + 1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--){
+                    Collections.swap(((baseList) data).getList(), i, i - 1);
+                }
+            }
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
     }
 
 }

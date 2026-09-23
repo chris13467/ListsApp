@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.Monsoon.lists.Lists.ListOfLists;
 import com.Monsoon.lists.Settings;
 import com.Monsoon.lists.enums.MenuState;
+import com.Monsoon.lists.util.Popups;
 
 public interface MainActivityCallback {
     public void setMenuListener(OnMenuItemPressed listener);
@@ -14,6 +15,9 @@ public interface MainActivityCallback {
     public ListOfLists getUserLists();
     public Settings getSettings();
     public MenuState getMenuState();
+    public Popups getPopupGenerator();
+
+
 
 
 
