@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.Monsoon.lists.Adapters.ListsViewHolder;
 import com.Monsoon.lists.Adapters.NumberedListAdapter;
 import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.Lists.NumberedList;
@@ -28,13 +29,7 @@ import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
 import com.Monsoon.lists.util.Popups;
 
-public class NumberedListFragment extends Fragment implements OnMenuItemPressed {
-
-private NumberedListFragmentBinding binding;
-private NumberedListAdapter adapter;
-private NumberedList list;
-private MainActivityCallback mainActivityCallback;
-
+public class NumberedListFragment extends AbstractListFragment<NumberedListFragmentBinding, NumberedList, NumberedItem, NumberedListAdapter.ViewHolder> {
 
 
     @Override
@@ -42,24 +37,12 @@ private MainActivityCallback mainActivityCallback;
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
       binding = NumberedListFragmentBinding.inflate(inflater, container, false);
       return binding.getRoot();
-
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                OnBackPressed();
-            }
-        });
-        super.onViewCreated(view, savedInstanceState);
-        mainActivityCallback = ((MainActivity)requireActivity());
-        list = (NumberedList) mainActivityCallback.getUserLists().getCurrentList();
-        mainActivityCallback.changeToolbarTitle(list.getName());
-        mainActivityCallback.setMenuListener(this);
+    @Override
+    protected void onChildViewCreated() {
         mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
         binding.queueListView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new NumberedListAdapter(list, new onListItemClickedListener<NumberedItem>() {
@@ -81,7 +64,7 @@ private MainActivityCallback mainActivityCallback;
             }
         });
         binding.queueListView.setAdapter(adapter);
-        setupDragAndDrop();
+        setupDragAndDrop(binding.queueListView);
         binding.newListNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,52 +82,11 @@ private MainActivityCallback mainActivityCallback;
 
     }
 
-    private void exitSelectMode(){
-        mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
-        adapter.changeSelectMode(false);
-        adapter.notifyDataSetChanged();
-        list.clearSelections();
+    @Override
+    protected void OnDropClearView() {
+        list.reassignPositions();
     }
 
-    private void setupDragAndDrop() {
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.UP | ItemTouchHelper.DOWN, // Allowed drag direction
-                0 // Swipe directions (0 = disabled)
-        ) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                int fromPosition = viewHolder.getAdapterPosition();
-                int toPosition = target.getAdapterPosition();
-
-                adapter.onItemMove(fromPosition, toPosition);
-                return true;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // Not used at this time
-            }
-
-            @Override
-            public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
-                super.onSelectedChanged(viewHolder, actionState);
-                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG){
-                    viewHolder.itemView.setAlpha(0.7f);
-                }
-            }
-
-            @Override
-            public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                super.clearView(recyclerView, viewHolder);
-                viewHolder.itemView.setAlpha(1.0f);
-                list.reassignPositions();
-                adapter.notifyDataSetChanged();
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(binding.queueListView);
-    }
 
     @Override
     public void onDestroyView() {
@@ -165,7 +107,7 @@ private MainActivityCallback mainActivityCallback;
                 mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
                 break;
             case NUMBERED_LIST_SELECT_MODE:
-                exitSelectMode();
+                exitSelectMode(MenuState.NUMBERED_LIST_NORMAL);
             default:
 
         }
@@ -197,7 +139,7 @@ private MainActivityCallback mainActivityCallback;
     @Override
     public void OnDeletePressed() {
         list.deleteSelected();
-        exitSelectMode();
+        exitSelectMode(MenuState.NUMBERED_LIST_NORMAL);
         mainActivityCallback.OnListChange();
     }
 
@@ -225,7 +167,7 @@ private MainActivityCallback mainActivityCallback;
         NumberedItem item = (NumberedItem) list.getSelected();
         adapter.onItemMove(item.getPosition(), 0);
         list.reassignPositions();
-        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(), 250);
+        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.NUMBERED_LIST_NORMAL), 250);
         mainActivityCallback.OnListChange();
     }
 
@@ -234,7 +176,7 @@ private MainActivityCallback mainActivityCallback;
         NumberedItem item = (NumberedItem) list.getSelected();
         adapter.onItemMove(item.getPosition(), list.getList().size() - 1);
         list.reassignPositions();
-        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(), 250);
+        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.NUMBERED_LIST_NORMAL), 250);
         mainActivityCallback.OnListChange();
     }
 
@@ -243,7 +185,7 @@ private MainActivityCallback mainActivityCallback;
         NumberedItem item = (NumberedItem) list.getRandomItem();
         adapter.onItemMove(item.getPosition(), 0);
         list.reassignPositions();
-        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(), 250);
+        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.NUMBERED_LIST_NORMAL), 250);
         mainActivityCallback.OnListChange();
     }
 }
