@@ -22,6 +22,7 @@ import com.Monsoon.lists.R;
 public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.ViewHolder> {
     public interface OnItemClickListener {
         void onItemClick();
+        void onItemLongClick();
     }
 
        baseList data;
@@ -41,6 +42,14 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     listener.onItemClick();
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+                @Override
+                public boolean onLongClick(View view) {
+                    listener.onItemLongClick();
+                    return true;
                 }
             });
             StringBuilder sb = new StringBuilder();

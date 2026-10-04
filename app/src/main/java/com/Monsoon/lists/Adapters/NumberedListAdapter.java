@@ -30,8 +30,7 @@ public class NumberedListAdapter extends AbstractListAdapter<NumberedList, Numbe
         public void bind(NumberedItem item, onListItemClickedListener<NumberedItem> listener) {
             setUniversalViewBinding(item, listener, isSelectMode);
             textContent.setText(item.getContents());
-            StringBuilder sb = new StringBuilder();
-            queueNumberView.setText(sb.append(item.getPosition()+1).toString());
+            queueNumberView.setText(String.valueOf(item.getPosition()+1));
         }
 
     }

@@ -3,7 +3,7 @@ package com.Monsoon.lists.enums;
 public enum MenuState {
     LIST_OF_LISTS_NORMAL,
     LIST_OF_LISTS_SELECT_MODE,
-    ADD_LIST,
+    LIST_OF_LISTS_ADD_LIST,
     ADD_ITEM,
     BASIC_LIST_NORMAL,
     BASIC_LIST_SELECT_MODE,

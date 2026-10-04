@@ -2,26 +2,33 @@ package com.Monsoon.lists.Lists;
 
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class baseList implements Serializable {
+    protected static final AtomicLong idCounter = new AtomicLong(1);
+    protected final long id;
     protected String listType_;
     protected String name_;
     protected AbstractList<BaseListItem> items_;
     protected BaseListItem currentItem_;
     private boolean isSelected;
+    private static final long serialVersionUID = 1L;
 
     //Constructors
     public baseList() {
+        this.id = idCounter.getAndIncrement();
         name_ = "";
         listType_ = Constants.ABSTRACT;
         currentItem_ = null;
         isSelected = false;
     }
     public baseList(String name) {
+        this.id = idCounter.getAndIncrement();
         this.name_ = name;
         listType_ = Constants.ABSTRACT;
         currentItem_ = null;
@@ -45,6 +52,7 @@ public abstract class baseList implements Serializable {
     public String getName(){
         return name_;
     }
+    public long getId(){ return id; }
 
     public AbstractList<BaseListItem> getList(){
         return items_;
@@ -58,7 +66,6 @@ public abstract class baseList implements Serializable {
         }
         return new BaseListItem();
     }
-
 
     //Setters
     public void setName_(String name){
@@ -90,6 +97,7 @@ public abstract class baseList implements Serializable {
         items_.remove(position);
         return false;
     }
+
     public BaseListItem getRandomItem(){
         Random rand = new Random();
         return items_.get(rand.nextInt(items_.size()));

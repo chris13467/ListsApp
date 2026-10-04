@@ -23,6 +23,7 @@ import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.NumberedListFragmentBinding;
+import com.Monsoon.lists.enums.ListType;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.MainActivityCallback;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
@@ -75,6 +76,11 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
                             @Override
                             public void onNumberSelected(int num) {
                                 binding.newListNumber.setText(String.valueOf(num));
+                            }
+
+                            @Override
+                            public void onListTypeSelected(ListType listType) {
+                                // not used
                             }
                         });
             }
@@ -188,4 +194,5 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
         new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.NUMBERED_LIST_NORMAL), 250);
         mainActivityCallback.OnListChange();
     }
+
 }

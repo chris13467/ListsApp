@@ -6,10 +6,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListPopupWindow;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.Monsoon.lists.Adapters.ListOfListsAdapter;
 import com.Monsoon.lists.R;
+import com.Monsoon.lists.enums.ListType;
 import com.Monsoon.lists.listeners.MainActivityCallback;
 
 public class Popups {
@@ -18,11 +27,53 @@ public class Popups {
 
     public interface PopupCallback{
         public void onNumberSelected(int num);
+        public void onListTypeSelected(ListType listType);
     }
 
     public Popups(Context context, LayoutInflater inflater){
         this.context = context;
         this.inflater = inflater;
+    }
+
+    public void showListSelectorPickerDialog(PopupCallback callback) {
+        // Inflate the custom layout
+        View dialogView = inflater.inflate(R.layout.list_selector, null);
+
+        // Initialize the NumberPicker from the custom layout
+        RecyclerView listSelector = dialogView.findViewById(R.id.list_selector_list);
+        listSelector.setLayoutManager(new GridLayoutManager(context, 2));
+
+
+        // Build the AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Select a list Type");
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        // Set negative (Cancel) button action
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        listSelector.setAdapter(new listPIckerAdapter(new PopupCallback() {
+            @Override
+            public void onNumberSelected(int num) {
+                // not used
+            }
+
+            @Override
+            public void onListTypeSelected(ListType listType) {
+                callback.onListTypeSelected(listType);
+                dialog.dismiss();
+            }
+        }));
+
+        // Show the dialog
+        dialog.show();
     }
 
     public void showNumberPickerDialog(int currentValue, int maxValue, PopupCallback callback) {

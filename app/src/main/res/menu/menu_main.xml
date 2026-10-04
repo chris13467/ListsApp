@@ -31,6 +31,16 @@
 
 
     <!-- Actions without icons will have orderInCategory 10 - 99 -->
+    <!-- Const: MENU_SELECT_ALL -->
+    <item android:id="@+id/action_select_all"
+        android:title="Select all"
+        android:orderInCategory="11"
+        app:showAsAction="never" />
+    <!-- Const: MENU_DESELECT_ALL -->
+    <item android:id="@+id/action_deselect_all"
+        android:title="Deselect all"
+        android:orderInCategory="12"
+        app:showAsAction="never" />
     <!-- Const: MENU_MOVE_TO_FRONT -->
     <item android:id="@+id/action_move_to_front"
         android:title="Move To Front"

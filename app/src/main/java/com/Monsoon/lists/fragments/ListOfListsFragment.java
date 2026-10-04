@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -13,18 +14,24 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.Monsoon.lists.Adapters.ListOfListsAdapter;
 import com.Monsoon.lists.Constants;
+import com.Monsoon.lists.ListItems.BaseListItem;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
+import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.Lists.ListOfLists;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
+import com.Monsoon.lists.Settings;
 import com.Monsoon.lists.databinding.ListOfListsFragmentBinding;
+import com.Monsoon.lists.enums.ListType;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
+import com.Monsoon.lists.listeners.onListItemClickedListener;
+import com.Monsoon.lists.util.Popups;
 
-public class ListOfListsFragment extends Fragment implements OnMenuItemPressed {
+public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmentBinding, ListOfLists, ListOfListsWrapper, ListOfListsAdapter.ViewHolder> {
 
-private ListOfListsFragmentBinding binding;
-private ListOfListsAdapter adapter;
+    ListType createListType;
 
     @Override
     public View onCreateView(
@@ -34,27 +41,19 @@ private ListOfListsAdapter adapter;
 
       binding = ListOfListsFragmentBinding.inflate(inflater, container, false);
       return binding.getRoot();
-
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
+    @Override
+    protected void onChildViewCreated() {
+        mainActivityCallback.onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
+        list = mainActivityCallback.getUserLists();
 
-            }
-        });
-        super.onViewCreated(view, savedInstanceState);
-        ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
-        binding.ListsView.setLayoutManager(new GridLayoutManager(getContext(), Constants.NUM_COLOMNS));
-        ListOfLists userLists = ((MainActivity) requireActivity()).getUserLists();
-        ((MainActivity)requireActivity()).setMenuListener(this);
-        adapter = new ListOfListsAdapter(userLists, new ListOfListsAdapter.OnItemClickListener() {
+        adapter = new ListOfListsAdapter(list, new onListItemClickedListener<ListOfListsWrapper>() {
             @Override
-            public void onItemClick(baseList item) {
-                ((MainActivity)requireActivity()).getUserLists().setCurrentList(item);
-                ((MainActivity)getActivity()).changeToolbarTitle(item.getName());
-                switch (item.getListType()) {
+            public void onItemClick(ListOfListsWrapper item) {
+                mainActivityCallback.getUserLists().setCurrentList(item.getList());
+                mainActivityCallback.changeToolbarTitle(item.getList().getName());
+                switch (item.getList().getListType()) {
                     case Constants.BASIC:
                         NavHostFragment.findNavController(ListOfListsFragment.this).
                                 navigate(R.id.action_load_basic_list);
@@ -67,26 +66,32 @@ private ListOfListsAdapter adapter;
                         NavHostFragment.findNavController(ListOfListsFragment.this).
                                 navigate(R.id.action_load_queue_list);
                         break;
-                    default:
-                            NavHostFragment.findNavController(ListOfListsFragment.this).
-                                    navigate(R.id.action_load_meal_plan);
-                        break;
                 }
-
             }
 
             @Override
-            public void onItemLongClick(baseList item) {
-                ((MainActivity)requireActivity()).onMenuContextChanged(MenuState.LIST_OF_LISTS_SELECT_MODE);
+            public void onItemLongClick(ListOfListsWrapper item) {
+                mainActivityCallback.onMenuContextChanged(MenuState.LIST_OF_LISTS_SELECT_MODE);
                 adapter.changeSelectMode(true);
                 adapter.notifyDataSetChanged();
             }
-        });
-        binding.ListsView.setAdapter(adapter);
 
+            @Override
+            public void onItemSelected(ListOfListsWrapper item) {
+
+            }
+        });
+
+        binding.ListsView.setAdapter(adapter);
+        binding.ListsView.setLayoutManager(new GridLayoutManager(getContext(), Constants.NUM_COLOMNS));
     }
 
-@Override
+    @Override
+    protected void OnDropClearView() {
+        // Drag and Drop not implemented not used
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
@@ -94,48 +99,74 @@ private ListOfListsAdapter adapter;
 
     @Override
     public void OnBackPressed() {
-
+        switch (mainActivityCallback.getMenuState()){
+            case LIST_OF_LISTS_NORMAL:
+                // this should never happen!
+                break;
+            case LIST_OF_LISTS_ADD_LIST:
+                binding.listContentInput.setText("");
+                binding.listAdd.setVisibility(View.GONE);
+                mainActivityCallback.onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
+                break;
+            case LIST_OF_LISTS_SELECT_MODE:
+                exitSelectMode(MenuState.LIST_OF_LISTS_NORMAL);
+                break;
+        }
     }
 
     @Override
     public void OnRandomizePressed() {
-
+        // not used
     }
 
     @Override
     public void OnEditPressed() {
-
+        //not used
     }
 
     @Override
     public void OnMoveToFrontPressed() {
-
+        // not used
     }
 
     @Override
     public void OnMoveToBackPressed() {
-
+        // not used
     }
 
     @Override
     public void OnRandomToFront() {
-
+        // not used
     }
 
     @Override
     public void OnAddPressed() {
-        ((MainActivity)requireActivity()).getUserLists().CreateList(Constants.NUMBERED, "Test Numbered List");
-        ((MainActivity)requireActivity()).OnListChange();
-        adapter.notifyDataSetChanged();
+        mainActivityCallback.getPopupGenerator().showListSelectorPickerDialog(new Popups.PopupCallback() {
+            @Override
+            public void onNumberSelected(int num) {
+                // not used
+            }
+
+            @Override
+            public void onListTypeSelected(ListType listType) {
+                list.CreateList(listType.label);
+                mainActivityCallback.onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
+                mainActivityCallback.OnListChange();
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
     @Override
     public void OnDonePressed() {
-
+        // not Used
     }
 
     @Override
     public void OnDeletePressed() {
-
+        list.deleteSelected();
+        exitSelectMode(MenuState.LIST_OF_LISTS_NORMAL);
+        mainActivityCallback.OnListChange();
     }
 }

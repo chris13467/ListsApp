@@ -23,6 +23,7 @@ import com.Monsoon.lists.util.Popups;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
@@ -66,7 +67,6 @@ private Popups popups;
         } else {
             settings = (Settings) LoadData(Constants.SETTINGS_FILE_NAME);
             lists = (ListOfLists) LoadData(Constants.LIST_FILE_NAME);
-
         }
 
 
@@ -96,7 +96,51 @@ private Popups popups;
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        boolean oneSelected;
+
         switch (menuState){
+            case LIST_OF_LISTS_NORMAL:
+                menu.getItem(Constants.MENU_SETTINGS).setVisible(true);
+                menu.getItem(Constants.MENU_ADD).setVisible(true);
+                menu.getItem(Constants.MENU_DONE).setVisible(false);
+                menu.getItem(Constants.MENU_DELETE).setVisible(false);
+                menu.getItem(Constants.MENU_RANDOMIZE).setVisible(false);
+                menu.getItem(Constants.MENU_EDIT).setVisible(false);
+                menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
+                menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                break;
+            case LIST_OF_LISTS_ADD_LIST:
+                menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
+                menu.getItem(Constants.MENU_ADD).setVisible(false);
+                menu.getItem(Constants.MENU_DONE).setVisible(true);
+                menu.getItem(Constants.MENU_DELETE).setVisible(false);
+                menu.getItem(Constants.MENU_RANDOMIZE).setVisible(false);
+                menu.getItem(Constants.MENU_EDIT).setVisible(false);
+                menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
+                menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                break;
+            case LIST_OF_LISTS_SELECT_MODE:
+                menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
+                menu.getItem(Constants.MENU_ADD).setVisible(false);
+                menu.getItem(Constants.MENU_DONE).setVisible(false);
+                menu.getItem(Constants.MENU_DELETE).setVisible(true);
+                menu.getItem(Constants.MENU_RANDOMIZE).setVisible(false);
+                menu.getItem(Constants.MENU_EDIT).setVisible(false);
+                menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
+                menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(true);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                break;
             case NUMBERED_LIST_NORMAL:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(true);
                 menu.getItem(Constants.MENU_ADD).setVisible(true);
@@ -107,6 +151,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(true);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 break;
             case NUMBERED_LIST_ADD_ITEM:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
@@ -118,9 +164,11 @@ private Popups popups;
                 menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 break;
             case NUMBERED_LIST_SELECT_MODE:
-                boolean oneSelected = lists.getCurrentList().getNumSelected() == 1;
+                oneSelected = lists.getCurrentList().getNumSelected() == 1;
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
                 menu.getItem(Constants.MENU_ADD).setVisible(false);
                 menu.getItem(Constants.MENU_DONE).setVisible(false);
@@ -130,6 +178,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(oneSelected);
                 menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(oneSelected);
                 menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(true);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(true);
                 break;
             default:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(true);
@@ -141,6 +191,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
         }
         return true;
     }
@@ -185,6 +237,12 @@ private Popups popups;
         }
         if (id == R.id.action_random_to_front){
             menuListener.OnRandomToFront();
+        }
+        if (id == R.id.action_select_all){
+            menuListener.OnSelectAll(true);
+        }
+        if (id == R.id.action_deselect_all){
+            menuListener.OnSelectAll(false);
         }
 
         return super.onOptionsItemSelected(item);

@@ -125,4 +125,9 @@ private BasicList list;
     public void OnRandomToFront() {
 
     }
+
+    @Override
+    public void OnSelectAll(boolean b) {
+
+    }
 }

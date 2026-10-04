@@ -6,6 +6,7 @@ public class Constants {
     public static final String MEAL_PLAN = "Meal Plan";
     public static final String NUMBERED = "Numbered";
     public static final String BASIC = "Basic";
+    public static final String LIST_OF_LISTS = "ListOfLists";
     public static final String BREAKFAST = "Breakfast";
     public static final String LUNCH  = "Lunch";
     public static final String DINNER = "Dinner";
@@ -65,9 +66,11 @@ public class Constants {
     public static final int MENU_DONE = 1;
     public static final int MENU_EDIT = 2;
     public static final int MENU_DELETE = 3;
-    public static final int MENU_MOVE_TO_FRONT = 4;
-    public static final int MENU_MOVE_TO_BACK = 5;
-    public static final int MENU_RANDOM_TO_FRONT = 6;
-    public static final int MENU_RANDOMIZE = 7;
-    public static final int MENU_SETTINGS = 8;
+    public static final int MENU_SELECT_ALL = 4;
+    public static final int MENU_DESELECT_ALL = 5;
+    public static final int MENU_MOVE_TO_FRONT = 6;
+    public static final int MENU_MOVE_TO_BACK = 7;
+    public static final int MENU_RANDOM_TO_FRONT = 8;
+    public static final int MENU_RANDOMIZE = 9;
+    public static final int MENU_SETTINGS = 10;
 }

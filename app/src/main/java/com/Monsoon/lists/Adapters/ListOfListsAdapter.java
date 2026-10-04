@@ -12,50 +12,54 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.Monsoon.lists.ListItems.BaseListItem;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
+import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.Lists.ListOfLists;
+import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
 
 
-public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.ViewHolder> {
-    public interface OnItemClickListener {
-        void onItemClick(baseList item);
-        void onItemLongClick(baseList item);
-    }
-    ListOfLists data;
-    OnItemClickListener listener;
+public class ListOfListsAdapter extends AbstractListAdapter<ListOfLists, ListOfListsWrapper, ListOfListsAdapter.ViewHolder> {
 
-    private boolean isSelectMode;
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView listNameView;
+    public class ViewHolder extends ListsViewHolder<ListOfListsWrapper> {
         RecyclerView listPreview;
         CardView cardView;
 
         public ViewHolder(View itemView){
             super(itemView);
-            listNameView = itemView.findViewById(R.id.list_name_view);
+            textContent = itemView.findViewById(R.id.list_name_view);
             listPreview = itemView.findViewById(R.id.list_preview);
             cardView = itemView.findViewById(R.id.card_view);
         }
 
-        public void bind(final baseList item, final OnItemClickListener listener) {
-            listNameView.setText(item.getName());
+        @Override
+        public void bind(ListOfListsWrapper item, onListItemClickedListener<ListOfListsWrapper> listener) {
+            if (isSelectMode){
+                if (item.isSelected()) itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.transparent_gray));
+                else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.white));
+            } else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.white));
 
+            textContent.setText(item.getList().getName());
             listPreview.setLayoutManager(new LinearLayoutManager(listPreview.getContext()));
-            switch (item.getListType()){
+            switch (item.getList().getListType()){
                 case Constants.BASIC:
-                    BasicListAdapter basicListAdapter = new BasicListAdapter((BasicList) item, new onListItemClickedListener<BaseListItem>() {
+                    BasicListAdapter basicListAdapter = new BasicListAdapter((BasicList) item.getList(), new onListItemClickedListener<BaseListItem>() {
                         @Override
                         public void onItemClick(BaseListItem item_b) {
-                            listener.onItemClick(item);
+                            if (!isSelectMode) listener.onItemClick(item);
+                            else {
+                                item.setSelected(!item.isSelected());
+                                listener.onItemLongClick(item);
+                            }
                         }
 
                         @Override
@@ -72,10 +76,20 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
                     break;
                 case Constants.TODO:
                 case Constants.NUMBERED:
-                    PreviewAdapter previewAdapter = new PreviewAdapter(item, new PreviewAdapter.OnItemClickListener() {
+                    PreviewAdapter previewAdapter = new PreviewAdapter(item.getList(), new PreviewAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick() {
-                            listener.onItemClick(item);
+                            if (!isSelectMode) listener.onItemClick(item);
+                            else {
+                                item.setSelected(!item.isSelected());
+                                listener.onItemLongClick(item);
+                            }
+                        }
+
+                        @Override
+                        public void onItemLongClick() {
+                            item.setSelected(!item.isSelected());
+                            listener.onItemLongClick(item);
                         }
                     });
                     listPreview.setAdapter(previewAdapter);
@@ -85,17 +99,27 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemClick(item);
+                    if (!isSelectMode) listener.onItemClick(item);
+                    else {
+                        item.setSelected(!item.isSelected());
+                        listener.onItemLongClick(item);
+                    }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    listener.onItemLongClick(item);
+                    item.setSelected(!item.isSelected());
+                    return true;
                 }
             });
         }
 
     }
 
-    public ListOfListsAdapter(ListOfLists data, OnItemClickListener listener) {
-        this.data = data;
-        this.listener = listener;
-        this.isSelectMode = false;
+    public ListOfListsAdapter(ListOfLists data, onListItemClickedListener<ListOfListsWrapper> listener) {
+        super(data, listener);
     }
 
     @NonNull
@@ -110,18 +134,14 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListOfListsAdapter.ViewHolder holder, int position) {
-        baseList currentItem = data.getUserLists().get(position);
-
-        holder.bind(currentItem, listener);
+    protected ListOfListsWrapper getCurrentItem(int position) {
+        return (ListOfListsWrapper) data.getList().get(position);
     }
+
 
     @Override
     public int getItemCount() {
-        return data.getUserLists().size();
+        return data.getList().size();
     }
 
-    public void changeSelectMode(boolean b){
-        this.isSelectMode = b;
-    }
 }

@@ -11,4 +11,5 @@ public interface OnMenuItemPressed {
     public void OnMoveToFrontPressed();
     public void OnMoveToBackPressed();
     public void OnRandomToFront();
+    public void OnSelectAll(boolean b);
 }

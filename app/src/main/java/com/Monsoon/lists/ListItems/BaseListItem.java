@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class BaseListItem implements Serializable {
     protected String contents_;
     protected boolean selected_;
+    private static final long serialVersionUID = 1L;
 
     public BaseListItem(){
         contents_ = "";

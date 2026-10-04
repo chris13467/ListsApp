@@ -106,5 +106,13 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
     protected abstract void onChildViewCreated();
     protected abstract void OnDropClearView();
 
+    @Override
+    public void OnSelectAll(boolean b) {
+        for (int i = 0; i < list.getList().size(); i++){
+            list.getList().get(i).setSelected(b);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 
 }

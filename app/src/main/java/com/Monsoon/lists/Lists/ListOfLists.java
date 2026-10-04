@@ -1,24 +1,21 @@
 package com.Monsoon.lists.Lists;
 
 import com.Monsoon.lists.Constants;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 import com.Monsoon.lists.Settings;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class ListOfLists implements Serializable {
-    private ArrayList<baseList> userLists;
+public class ListOfLists extends baseList {
     private baseList CurrentList;
     private Settings settings;
-//TODO: add Note type
     public ListOfLists(Settings settings){
-        userLists = new ArrayList<>();
+        items_ = new ArrayList<>();
+        listType_ = Constants.LIST_OF_LISTS;
         CurrentList = new BasicList();
         this.settings = settings;
-    }
-
-    public ArrayList<baseList> getUserLists(){
-        return userLists;
     }
 
     public baseList getCurrentList(){
@@ -40,7 +37,8 @@ public class ListOfLists implements Serializable {
             default:
                 newList = new BasicList();
         }
-        userLists.add(newList);
+        ListOfListsWrapper wrapper = new ListOfListsWrapper(newList);
+        items_.add(wrapper);
         CurrentList = newList;
         return newList;
     }
@@ -57,32 +55,28 @@ public class ListOfLists implements Serializable {
             default:
                 newList = new BasicList(name);
         }
-        userLists.add(newList);
+        ListOfListsWrapper wrapper = new ListOfListsWrapper(newList);
+        items_.add(wrapper);
         CurrentList = newList;
         return newList;
     }
 
     public void moveCurrentListToFront(){
-        userLists.remove(CurrentList);
-        userLists.add(0, CurrentList);
-    }
+        if (items_.size() > 1){
+            Collections.swap(items_, 0, findList(CurrentList));
+        }
 
-    public boolean removeList(baseList userList){
-        return userLists.remove(userList);
     }
-
-    public boolean removeList(String name){
-        boolean found = false;
-        for (baseList l : userLists){
-            if (l.getName().equals(name)){
-                found = true;
-                userLists.remove(l);
+    public int findList(baseList item){
+        int index = -1;
+        for (int i = 0; i < items_.size(); i++) {
+            if (((ListOfListsWrapper)items_.get(i)).getList().getId() == item.getId()) {
+                index = i;
                 break;
             }
         }
-        return found;
+        return index;
     }
-
     public static ListOfLists getListFirstOnFirstLoad(Settings settings){
         ListOfLists lists = new ListOfLists(settings);
         return lists;
