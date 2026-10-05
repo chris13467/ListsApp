@@ -43,7 +43,7 @@
         app:showAsAction="never" />
     <!-- Const: MENU_MOVE_TO_FRONT -->
     <item android:id="@+id/action_move_to_front"
-        android:title="Move To Front"
+        android:title="Move To front"
         android:orderInCategory="20"
         app:showAsAction="never" />
     <!-- Const: MENU_MOVE_TO_BACK -->
@@ -53,8 +53,18 @@
         app:showAsAction="never" />
     <!-- Const: MENU_RANDOM_TO_FRONT -->
     <item android:id="@+id/action_random_to_front"
-        android:title="Random To Front"
+        android:title="Random To front"
         android:orderInCategory="22"
+        app:showAsAction="never" />
+    <!-- Const: MENU_RANDOM_TAG_TO_FRONT    -->
+    <item android:id="@+id/action_random_tag_to_front"
+        android:title="Random to front by tag"
+        android:orderInCategory="23"
+        app:showAsAction="never" />
+    <!-- Const: MENU_All_TAG_TO_FRONT    -->
+    <item android:id="@+id/action_all_tag_to_front"
+        android:title="All to front by tag"
+        android:orderInCategory="24"
         app:showAsAction="never" />
     <!-- Const: MENU_RANDOMIZE -->
     <item android:id="@+id/action_randomize_list"

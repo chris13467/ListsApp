@@ -127,4 +127,14 @@ private TodoListAdapter adapter;
     public void OnSelectAll(boolean b) {
 
     }
+
+    @Override
+    public void OnRandomTagToFront() {
+
+    }
+
+    @Override
+    public void OnAllTagToFront() {
+
+    }
 }

@@ -1,36 +1,23 @@
 package com.Monsoon.lists.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.Monsoon.lists.Adapters.AbstractListAdapter;
 import com.Monsoon.lists.Adapters.ListsViewHolder;
-import com.Monsoon.lists.Adapters.NumberedListAdapter;
 import com.Monsoon.lists.ListItems.BaseListItem;
-import com.Monsoon.lists.ListItems.NumberedItem;
-import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.MainActivity;
-import com.Monsoon.lists.R;
-import com.Monsoon.lists.databinding.NumberedListFragmentBinding;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.MainActivityCallback;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
-import com.Monsoon.lists.listeners.onListItemClickedListener;
-import com.Monsoon.lists.util.Popups;
 
 abstract public class AbstractListFragment<B, L extends baseList, I extends BaseListItem, VH extends ListsViewHolder<I>> extends Fragment implements OnMenuItemPressed {
     protected B binding;

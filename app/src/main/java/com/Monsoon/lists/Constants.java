@@ -3,13 +3,10 @@ package com.Monsoon.lists;
 public class Constants {
     public static final String ABSTRACT = "Abstract";
     public static final String TODO = "Todo";
-    public static final String MEAL_PLAN = "Meal Plan";
     public static final String NUMBERED = "Numbered";
+    public static final String BOOK = "Book";
     public static final String BASIC = "Basic";
     public static final String LIST_OF_LISTS = "ListOfLists";
-    public static final String BREAKFAST = "Breakfast";
-    public static final String LUNCH  = "Lunch";
-    public static final String DINNER = "Dinner";
 
     public static final String DAILY = "Daily";
     public static final String EVERY_OTHER_DAY = "Every other day";
@@ -47,7 +44,6 @@ public class Constants {
     public static final int FRIDAY_V = 5;
     public static final int SATURDAY_V = 6;
 
-    public static final int MEAL_PER_DAY = 3;
     public static final int DAYS_PER_WEEK = 7;
 
     public static final String LIST_FILE_NAME = "Lists.dat";
@@ -61,7 +57,8 @@ public class Constants {
 
     public static final String SHARED_PREFRENCES = "ListPrefs";
 
-
+    public static final String TAGS = "Tags: ";
+    public static final String ADD_TAG = "add new tag";
     public static final int MENU_ADD = 0;
     public static final int MENU_DONE = 1;
     public static final int MENU_EDIT = 2;
@@ -71,6 +68,8 @@ public class Constants {
     public static final int MENU_MOVE_TO_FRONT = 6;
     public static final int MENU_MOVE_TO_BACK = 7;
     public static final int MENU_RANDOM_TO_FRONT = 8;
-    public static final int MENU_RANDOMIZE = 9;
-    public static final int MENU_SETTINGS = 10;
+    public static final int MENU_RANDOM_TAG_TO_FRONT = 9;
+    public static final int MENU_All_TAG_TO_FRONT = 10;
+    public static final int MENU_RANDOMIZE = 11;
+    public static final int MENU_SETTINGS = 12;
 }

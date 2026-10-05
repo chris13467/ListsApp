@@ -12,4 +12,6 @@ public interface OnMenuItemPressed {
     public void OnMoveToBackPressed();
     public void OnRandomToFront();
     public void OnSelectAll(boolean b);
+    public void OnRandomTagToFront();
+    public void OnAllTagToFront();
 }

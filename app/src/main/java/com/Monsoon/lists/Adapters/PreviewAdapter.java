@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
+import com.Monsoon.lists.ListItems.BookItem;
 import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.ListItems.TodoItem;
 import com.Monsoon.lists.Lists.baseList;
@@ -60,6 +61,10 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.ViewHold
                     break;
                 case Constants.NUMBERED:
                     sb.append(((NumberedItem)item).getPosition() + 1).append(" - ").append(item.getContents());
+                    basicListView.setText(sb.toString());
+                    break;
+                case Constants.BOOK:
+                    sb.append(((BookItem)item).getPosition() + 1).append(" - ").append(item.getContents());
                     basicListView.setText(sb.toString());
                     break;
             }

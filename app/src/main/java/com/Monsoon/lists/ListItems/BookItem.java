@@ -1,36 +1,31 @@
 package com.Monsoon.lists.ListItems;
 
+import com.Monsoon.lists.util.Tags;
+
 import java.util.ArrayList;
 
 public class BookItem extends NumberedItem{
     private int position_;
-    private ArrayList<String> tags;
+    private Tags tags;
 
     public BookItem(){
         super();
-        tags = new ArrayList<>();
+        tags = new Tags();
     }
 
-    public BookItem(String contents){
+    public BookItem(String contents, Tags tags){
         super(contents);
-        tags = new ArrayList<>();
+        this.tags = new Tags();
+        this.tags.addTags(tags.getList());
     }
 
-    public BookItem(String contents, int position){
+    public BookItem(String contents, int position, Tags tags){
         super(contents);
-        tags = new ArrayList<>();
+        this.tags = new Tags();
+        this.tags.addTags(tags.getList());
     }
 
-    public void addTags(ArrayList<String> newTags){
-        for (String tag : newTags){
-            if (!tags.contains(tag)){
-                tags.add(tag);
-            }
-        }
+    public Tags getTags() {
+        return tags;
     }
-
-    public boolean containsTag(String tag){
-        return tags.contains(tag);
-    }
-
 }

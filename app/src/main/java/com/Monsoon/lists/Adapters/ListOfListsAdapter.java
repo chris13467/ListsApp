@@ -76,6 +76,7 @@ public class ListOfListsAdapter extends AbstractListAdapter<ListOfLists, ListOfL
                     break;
                 case Constants.TODO:
                 case Constants.NUMBERED:
+                case Constants.BOOK:
                     PreviewAdapter previewAdapter = new PreviewAdapter(item.getList(), new PreviewAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick() {

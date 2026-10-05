@@ -1,24 +1,29 @@
 package com.Monsoon.lists;
 
+import android.nfc.Tag;
+
+import com.Monsoon.lists.util.Tags;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class Settings implements Serializable {
     //TODO: theme Settings
     //TODO: strikethrough on todochecked
-    private int numberOfDaysBeforeMealRemoval_;
+
+    private Tags userTages;
+    private static final long serialVersionUID = 1L;
 
 
     public Settings(){
-        numberOfDaysBeforeMealRemoval_ = 7;
+        userTages = new Tags();
     }
 
-    public int getNumberOfDaysBeforeMealRemoval(){
-        return numberOfDaysBeforeMealRemoval_;
+    public Tags getUserTages(){
+        return userTages;
     }
 
-    public void setNumberOfDaysBeforeMealRemoval(int numDays){
-        numberOfDaysBeforeMealRemoval_ = numDays;
-    }
+
 
 }

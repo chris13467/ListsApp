@@ -8,7 +8,8 @@ import com.Monsoon.lists.R;
 import java.io.Serializable;
 
 public enum ListType implements Serializable {
-    NUMBERED_LIST(Constants.NUMBERED, R.color.numbered_list);
+    NUMBERED_LIST(Constants.NUMBERED, R.color.numbered_list),
+    BOOK_LIST(Constants.BOOK, R.color.book_list);
 
     public final String label;
     public final int color;

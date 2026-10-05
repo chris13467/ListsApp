@@ -46,7 +46,7 @@ public class NumberedListAdapter extends AbstractListAdapter<NumberedList, Numbe
         Log.d(TAG, "Rv_active_Child.." + viewType);
 
         viewHolder = new NumberedListAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.queue_list_item, parent, false));
+                inflate(R.layout.numbered_list_item, parent, false));
         return viewHolder;
     }
 

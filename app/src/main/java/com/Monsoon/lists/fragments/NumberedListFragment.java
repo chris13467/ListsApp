@@ -7,28 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.Monsoon.lists.Adapters.ListsViewHolder;
 import com.Monsoon.lists.Adapters.NumberedListAdapter;
 import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.Lists.NumberedList;
-import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.NumberedListFragmentBinding;
 import com.Monsoon.lists.enums.ListType;
 import com.Monsoon.lists.enums.MenuState;
-import com.Monsoon.lists.listeners.MainActivityCallback;
-import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
-import com.Monsoon.lists.util.Popups;
+import com.Monsoon.lists.util.Popup.Popups;
+
+import java.util.ArrayList;
 
 public class NumberedListFragment extends AbstractListFragment<NumberedListFragmentBinding, NumberedList, NumberedItem, NumberedListAdapter.ViewHolder> {
 
@@ -80,6 +73,16 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
 
                             @Override
                             public void onListTypeSelected(ListType listType) {
+                                // not used
+                            }
+
+                            @Override
+                            public void onTagClicked(int pos) {
+                                // not used
+                            }
+
+                            @Override
+                            public void onTagsSelected(ArrayList<String> newTags) {
                                 // not used
                             }
                         });
@@ -193,6 +196,16 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
         list.reassignPositions();
         new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.NUMBERED_LIST_NORMAL), 250);
         mainActivityCallback.OnListChange();
+    }
+
+    @Override
+    public void OnRandomTagToFront() {
+        // not used
+    }
+
+    @Override
+    public void OnAllTagToFront() {
+        // not used
     }
 
 }

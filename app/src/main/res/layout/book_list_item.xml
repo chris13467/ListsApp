@@ -3,27 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/book_list_item_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/queue_number_view"
+            android:id="@+id/book_number_view"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/queue_item_text"
+            app:layout_constraintBottom_toTopOf="@id/book_tags_text_view"
+            app:layout_constraintEnd_toEndOf="@id/book_item_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/queue_item_text"
+            android:id="@+id/book_item_text"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -32,37 +33,30 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:textSize="8pt"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/book_tags_text_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/queue_number_view"
+            app:layout_constraintStart_toEndOf="@id/book_number_view"
             app:layout_constraintTop_toTopOf="parent" />
 
+
     </LinearLayout>
-    <FrameLayout
-        android:id="@+id/queue_overlay"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+    <TextView
+        android:id="@+id/book_tags_text_view"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/transparent_gray"
-        android:visibility="gone">
-
-        <CheckBox
-            android:id="@+id/selected_radio_queue"
-            style="@android:style/Widget.CompoundButton.RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@id/book_list_item_linear_layout"
+        app:layout_constraintBottom_toTopOf="@id/divider"/>
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#1A646464"
+        app:layout_constraintTop_toBottomOf="@id/book_tags_text_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

@@ -25,23 +25,6 @@ public class ListOfLists extends baseList {
         this.CurrentList = currentList;
     }
 
-    public baseList CreateList(String listType){
-        baseList newList;
-        switch (listType) {
-            case Constants.TODO:
-                newList = new TodoList();
-                break;
-            case Constants.NUMBERED:
-                newList = new NumberedList();
-                break;
-            default:
-                newList = new BasicList();
-        }
-        ListOfListsWrapper wrapper = new ListOfListsWrapper(newList);
-        items_.add(wrapper);
-        CurrentList = newList;
-        return newList;
-    }
 
     public baseList CreateList(String listType, String name){
         baseList newList;
@@ -51,6 +34,9 @@ public class ListOfLists extends baseList {
                 break;
             case Constants.NUMBERED:
                 newList = new NumberedList(name);
+                break;
+            case Constants.BOOK:
+                newList = new BookList(name);
                 break;
             default:
                 newList = new BasicList(name);

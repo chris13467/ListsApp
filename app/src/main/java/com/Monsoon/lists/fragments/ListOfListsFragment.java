@@ -6,28 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.Monsoon.lists.Adapters.ListOfListsAdapter;
 import com.Monsoon.lists.Constants;
-import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.ListItems.ListOfListsWrapper;
-import com.Monsoon.lists.Lists.BasicList;
 import com.Monsoon.lists.Lists.ListOfLists;
-import com.Monsoon.lists.Lists.baseList;
-import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.R;
-import com.Monsoon.lists.Settings;
 import com.Monsoon.lists.databinding.ListOfListsFragmentBinding;
 import com.Monsoon.lists.enums.ListType;
 import com.Monsoon.lists.enums.MenuState;
-import com.Monsoon.lists.listeners.OnMenuItemPressed;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
-import com.Monsoon.lists.util.Popups;
+import com.Monsoon.lists.util.Popup.Popups;
+
+import java.util.ArrayList;
 
 public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmentBinding, ListOfLists, ListOfListsWrapper, ListOfListsAdapter.ViewHolder> {
 
@@ -64,7 +58,11 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
                         break;
                     case Constants.NUMBERED:
                         NavHostFragment.findNavController(ListOfListsFragment.this).
-                                navigate(R.id.action_load_queue_list);
+                                navigate(R.id.action_load_numbered_list);
+                        break;
+                    case Constants.BOOK:
+                        NavHostFragment.findNavController(ListOfListsFragment.this).
+                                navigate(R.id.action_load_book_list);
                         break;
                 }
             }
@@ -140,6 +138,16 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
     }
 
     @Override
+    public void OnRandomTagToFront() {
+        // not used
+    }
+
+    @Override
+    public void OnAllTagToFront() {
+        // not used
+    }
+
+    @Override
     public void OnAddPressed() {
         mainActivityCallback.getPopupGenerator().showListSelectorPickerDialog(new Popups.PopupCallback() {
             @Override
@@ -149,10 +157,20 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
 
             @Override
             public void onListTypeSelected(ListType listType) {
-                list.CreateList(listType.label);
+                list.CreateList(listType.label, listType.label);
                 mainActivityCallback.onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
                 mainActivityCallback.OnListChange();
                 adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onTagClicked(int pos) {
+                // not used
+            }
+
+            @Override
+            public void onTagsSelected(ArrayList<String> newTags) {
+                // not used
             }
         });
 

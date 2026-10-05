@@ -130,4 +130,14 @@ private BasicList list;
     public void OnSelectAll(boolean b) {
 
     }
+
+    @Override
+    public void OnRandomTagToFront() {
+
+    }
+
+    @Override
+    public void OnAllTagToFront() {
+
+    }
 }

@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent_gray">#80808080</color>
     <color name="numbered_list">#800000FF</color>
+    <color name="book_list">#7800BCD4</color>
+    <color name="clear">#00000000</color>
 </resources>
