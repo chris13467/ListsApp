@@ -35,6 +35,7 @@ public class NumberedListAdapter extends AbstractListAdapter<NumberedList, Numbe
 
     }
 
+
     public NumberedListAdapter(NumberedList data, onListItemClickedListener<NumberedItem> listener){
         super(data, listener);
     }

@@ -1,5 +1,7 @@
 package com.Monsoon.lists.Lists;
 
+import android.util.Log;
+
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 import com.Monsoon.lists.Settings;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ListOfLists extends baseList {
+    private static final long serialVersionUID = 1L;
     private baseList CurrentList;
     private Settings settings;
     public ListOfLists(Settings settings){
@@ -38,6 +41,9 @@ public class ListOfLists extends baseList {
             case Constants.BOOK:
                 newList = new BookList(name);
                 break;
+            case Constants.BOOK_SERIES:
+                newList = new BookSeriesList(name);
+                break;
             default:
                 newList = new BasicList(name);
         }
@@ -49,7 +55,11 @@ public class ListOfLists extends baseList {
 
     public void moveCurrentListToFront(){
         if (items_.size() > 1){
-            Collections.swap(items_, 0, findList(CurrentList));
+            int curIndex = findList(CurrentList);
+
+            for (int i = curIndex; i > 0; i--){
+               Collections.swap(items_, i, i-1);
+            }
         }
 
     }

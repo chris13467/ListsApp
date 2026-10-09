@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class NumberedList extends baseList {
+    private static final long serialVersionUID = 1L;
     public NumberedList(){
         super();
         items_ = new LinkedList<>();

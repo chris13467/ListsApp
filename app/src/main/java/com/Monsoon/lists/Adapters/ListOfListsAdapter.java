@@ -45,8 +45,8 @@ public class ListOfListsAdapter extends AbstractListAdapter<ListOfLists, ListOfL
         public void bind(ListOfListsWrapper item, onListItemClickedListener<ListOfListsWrapper> listener) {
             if (isSelectMode){
                 if (item.isSelected()) itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.transparent_gray));
-                else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.white));
-            } else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.white));
+                else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.clear));
+            } else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.clear));
 
             textContent.setText(item.getList().getName());
             listPreview.setLayoutManager(new LinearLayoutManager(listPreview.getContext()));

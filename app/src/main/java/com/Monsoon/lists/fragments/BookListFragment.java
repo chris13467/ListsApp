@@ -91,11 +91,16 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
 
                             @Override
                             public void onTagClicked(int pos) {
-
+                                // not used
                             }
 
                             @Override
                             public void onTagsSelected(ArrayList<String> newTags) {
+                                // not used
+                            }
+
+                            @Override
+                            public void onDateSelected(String date) {
 
                             }
                         }
@@ -247,6 +252,11 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
                             mainActivityCallback.OnListChange();
                         }
                     }
+
+                    @Override
+                    public void onDateSelected(String date) {
+
+                    }
                 }
         );
     }
@@ -279,70 +289,27 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
                         new Handler(Looper.getMainLooper()).postDelayed(() -> exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
                         mainActivityCallback.OnListChange();
                     }
+
+                    @Override
+                    public void onDateSelected(String date) {
+
+                    }
                 }
         );
     }
 
-    private void setTagText(Tags tags){
-        StringBuilder sb = new StringBuilder(Constants.TAGS);
-        for (int i = 0; i < tags.getList().size(); i++){
-            sb.append(tags.getList().get(i));
-            if (i < tags.getList().size() - 1) sb.append(", ");
-        }
-        sb.append("   ");
-        sb.append(Constants.ADD_TAG);
-        String tagText = sb.toString();
-        SpannableString spannableString = new SpannableString(tagText);
 
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View view) {
-                mainActivityCallback.getPopupGenerator().showTagsPickerDialog(
-                        mainActivityCallback.getSettings().getUserTages(),
-                        false,
-                        new Popups.PopupCallback() {
-                            @Override
-                            public void onNumberSelected(int num) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onListTypeSelected(ListType listType) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagClicked(int pos) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagsSelected(ArrayList<String> newTags) {
-                                newBookTags = new Tags();
-                                newBookTags.addTags(newTags);
-                                setTagText(newBookTags);
-                                mainActivityCallback.OnSettingsChanged();
-                            }
-                        }
-                );
-            }
-
-            @Override
-            public void updateDrawState(@NonNull TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setTypeface(Typeface.create(ds.getTypeface(), Typeface.BOLD));
-                ds.setUnderlineText(false);
-                ds.setColor(Color.BLUE);
-            }
-        };
-
-        int startIndex = tagText.indexOf(Constants.ADD_TAG);
-        int endIndex = startIndex + Constants.ADD_TAG.length();
-
-        spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+    @Override
+    protected void bindTagTextToView(SpannableString spannableString) {
         binding.bookTagsTextView.setText(spannableString);
         binding.bookTagsTextView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
 
+    @Override
+    protected void ResolveTagsSelected(ArrayList<String> newTags) {
+        newBookTags = new Tags();
+        newBookTags.addTags(newTags);
+        setTagText(newBookTags);
+        mainActivityCallback.OnSettingsChanged();
     }
 }

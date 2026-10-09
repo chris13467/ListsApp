@@ -7,6 +7,7 @@ import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
 
 public class TodoItem extends BaseListItem{
+    private static final long serialVersionUID = 1L;
     private boolean checked_;
     private boolean repeatable_;
     private Frequency frequency_;

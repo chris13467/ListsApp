@@ -77,6 +77,14 @@ public abstract class baseList implements Serializable {
         items_.add(item);
     }
     public boolean removeItem(BaseListItem item){
+        if (item == currentItem_) {
+            for (BaseListItem i : items_){
+                if (i != item) {
+                    currentItem_ = i;
+                    break;
+                }
+            }
+        }
         return items_.remove(item);
     }
     public boolean removeItem(String contents){

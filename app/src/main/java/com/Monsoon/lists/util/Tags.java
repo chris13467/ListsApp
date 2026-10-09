@@ -7,6 +7,8 @@ public class Tags implements Serializable {
     private ArrayList<String> tags;
     private ArrayList<Boolean> selectedTags;
 
+    private static final long serialVersionUID = 1L;
+
     public Tags(){
         tags = new ArrayList<>();
         selectedTags = new ArrayList<>();

@@ -11,6 +11,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class TodoList extends baseList{
+    private static final long serialVersionUID = 1L;
     private ArrayList<TodoItem> repeatableList_;
     private boolean removeOnChecked_;
 

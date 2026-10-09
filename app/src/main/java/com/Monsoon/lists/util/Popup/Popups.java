@@ -1,11 +1,13 @@
 package com.Monsoon.lists.util.Popup;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
@@ -16,7 +18,10 @@ import com.Monsoon.lists.R;
 import com.Monsoon.lists.enums.ListType;
 import com.Monsoon.lists.util.Tags;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Popups {
     private Context context;
@@ -27,6 +32,7 @@ public class Popups {
         public void onListTypeSelected(ListType listType);
         public void onTagClicked(int pos);
         public void onTagsSelected(ArrayList<String> newTags);
+        public void onDateSelected(String date);
     }
 
     public Popups(Context context, LayoutInflater inflater){
@@ -80,6 +86,11 @@ public class Popups {
                 // not used
             }
 
+            @Override
+            public void onDateSelected(String date) {
+
+            }
+
         }));
 
         // Show the dialog
@@ -124,6 +135,11 @@ public class Popups {
             @Override
             public void onTagsSelected(ArrayList<String> newTags) {
                 // not used
+            }
+
+            @Override
+            public void onDateSelected(String date) {
+
             }
         });
 
@@ -211,6 +227,39 @@ public class Popups {
 
         // Show the dialog
         builder.create().show();
+    }
+
+    public void showDatePickerDialog(PopupCallback callback) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                context,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay) {
+                        calendar.set(Calendar.YEAR, selectedYear);
+                        calendar.set(Calendar.MONTH, selectedMonth);
+                        calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+                        String formattedDate = sdf.format(calendar.getTime());
+
+                        if (callback != null) {
+                            callback.onDateSelected(formattedDate);
+                        }
+                    }
+                },
+                year,
+                month,
+                day
+        );
+
+        // Show the dialog
+        datePickerDialog.show();
     }
 
 }

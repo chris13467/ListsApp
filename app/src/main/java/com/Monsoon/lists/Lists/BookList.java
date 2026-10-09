@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class BookList extends NumberedList {
+    private static final long serialVersionUID = 1L;
     public BookList(){
         super();
         listType_ = Constants.BOOK;
@@ -19,6 +20,11 @@ public class BookList extends NumberedList {
     public BookList(String name){
         super(name);
         listType_ = Constants.BOOK;
+    }
+    public BookList(ArrayList<BookItem> booksInSeries){
+        super("");
+        listType_ = Constants.BOOKS_IN_SERIES;
+        items_.addAll(booksInSeries);
     }
 
     public void taggedItemsToTop(String tag){

@@ -64,6 +64,11 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
                         NavHostFragment.findNavController(ListOfListsFragment.this).
                                 navigate(R.id.action_load_book_list);
                         break;
+                    case Constants.BOOK_SERIES:
+                        NavHostFragment.findNavController(ListOfListsFragment.this).
+                                navigate(R.id.action_load_book_series_list);
+                        break;
+
                 }
             }
 
@@ -171,6 +176,11 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
             @Override
             public void onTagsSelected(ArrayList<String> newTags) {
                 // not used
+            }
+
+            @Override
+            public void onDateSelected(String date) {
+
             }
         });
 

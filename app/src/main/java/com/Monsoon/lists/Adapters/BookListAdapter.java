@@ -14,6 +14,7 @@ import com.Monsoon.lists.ListItems.BookItem;
 import com.Monsoon.lists.Lists.BookList;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.listeners.onListItemClickedListener;
+import com.Monsoon.lists.util.Util;
 
 public class BookListAdapter extends AbstractListAdapter<BookList, BookItem, BookListAdapter.ViewHolder> {
 
@@ -33,12 +34,7 @@ public class BookListAdapter extends AbstractListAdapter<BookList, BookItem, Boo
             setUniversalViewBinding(item, listener, isSelectMode);
             textContent.setText(item.getContents());
             queueNumberView.setText(String.valueOf(item.getPosition()+1));
-            StringBuilder sb = new StringBuilder("Tags: ");
-            for (int i = 0; i < item.getTags().getList().size(); i++){
-                sb.append(item.getTags().getList().get(i));
-                if (i < item.getTags().getList().size() - 1) sb.append(", ");
-            }
-            tagsView.setText(sb.toString());
+            tagsView.setText(Util.getTagsString(item.getTags(), false));
         }
 
     }

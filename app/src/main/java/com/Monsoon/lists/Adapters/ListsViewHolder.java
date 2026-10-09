@@ -28,23 +28,31 @@ public abstract class ListsViewHolder<I extends BaseListItem> extends RecyclerVi
     protected void setUniversalViewBinding(I item, onListItemClickedListener<I> listener, boolean isSelectMode){
         if (isSelectMode){
             if (item.isSelected()) itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.transparent_gray));
-            else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.white));
-        } else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.white));
+            else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.clear));
+        } else itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext() ,R.color.clear));
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                item.setSelected(!item.isSelected());
-                listener.onItemClick(item);
+               onListItemClicked(item, listener, isSelectMode);
             }
         });
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                listener.onItemLongClick(item);
-                return false;
+                return onListItemLongClicked(item, listener, isSelectMode);
             }
         });
+    }
+
+    protected void onListItemClicked(I item, onListItemClickedListener<I> listener, boolean isSelectMode){
+        item.setSelected(!item.isSelected());
+        listener.onItemClick(item);
+    }
+
+    protected boolean onListItemLongClicked(I item, onListItemClickedListener<I> listener, boolean isSelectMode){
+        listener.onItemLongClick(item);
+        return false;
     }
 
 }

@@ -1,6 +1,13 @@
 package com.Monsoon.lists.fragments;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
@@ -12,12 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Monsoon.lists.Adapters.AbstractListAdapter;
 import com.Monsoon.lists.Adapters.ListsViewHolder;
+import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.MainActivity;
+import com.Monsoon.lists.enums.ListType;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.MainActivityCallback;
 import com.Monsoon.lists.listeners.OnMenuItemPressed;
+import com.Monsoon.lists.util.Popup.Popups;
+import com.Monsoon.lists.util.Tags;
+import com.Monsoon.lists.util.Util;
+
+import java.util.ArrayList;
 
 abstract public class AbstractListFragment<B, L extends baseList, I extends BaseListItem, VH extends ListsViewHolder<I>> extends Fragment implements OnMenuItemPressed {
     protected B binding;
@@ -99,6 +113,71 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
             list.getList().get(i).setSelected(b);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    protected void setTagText(Tags tags){
+        String tagText = Util.getTagsString(tags, true);
+        SpannableString spannableString = new SpannableString(tagText);
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                mainActivityCallback.getPopupGenerator().showTagsPickerDialog(
+                        mainActivityCallback.getSettings().getUserTages(),
+                        false,
+                        new Popups.PopupCallback() {
+                            @Override
+                            public void onNumberSelected(int num) {
+                                // not used
+                            }
+
+                            @Override
+                            public void onListTypeSelected(ListType listType) {
+                                // not used
+                            }
+
+                            @Override
+                            public void onTagClicked(int pos) {
+                                // not used
+                            }
+
+                            @Override
+                            public void onTagsSelected(ArrayList<String> newTags) {
+                                ResolveTagsSelected(newTags);
+                            }
+
+                            @Override
+                            public void onDateSelected(String date) {
+
+                            }
+                        }
+                );
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setTypeface(Typeface.create(ds.getTypeface(), Typeface.BOLD));
+                ds.setUnderlineText(false);
+                ds.setColor(Color.BLUE);
+            }
+        };
+
+        int startIndex = tagText.indexOf(Constants.ADD_TAG);
+        int endIndex = startIndex + Constants.ADD_TAG.length();
+
+        spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+       bindTagTextToView(spannableString);
+
+    }
+
+    protected void ResolveTagsSelected(ArrayList<String> newTags){
+        // do something when overloaded
+    }
+
+    protected void bindTagTextToView(SpannableString spannableString){
+        // do something when overloaded
     }
 
 

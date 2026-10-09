@@ -1,6 +1,7 @@
 package com.Monsoon.lists.ListItems;
 
 public class NumberedItem extends BaseListItem{
+    private static final long serialVersionUID = 1L;
     private int position_;
 
     public NumberedItem(){

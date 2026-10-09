@@ -5,6 +5,8 @@ public class Constants {
     public static final String TODO = "Todo";
     public static final String NUMBERED = "Numbered";
     public static final String BOOK = "Book";
+    public static final String BOOK_SERIES = "Book Series";
+    public static final String BOOKS_IN_SERIES = "Books in Series";
     public static final String BASIC = "Basic";
     public static final String LIST_OF_LISTS = "ListOfLists";
 

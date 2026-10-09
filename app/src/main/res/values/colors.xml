@@ -4,6 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent_gray">#80808080</color>
     <color name="numbered_list">#800000FF</color>
-    <color name="book_list">#7800BCD4</color>
+    <color name="book_list">#8000BCD4</color>
+    <color name="book_series_list">#8003A9F4</color>
+    <color name="blue">#FF0000FF</color>
     <color name="clear">#00000000</color>
+    <color name="red">#FFFF0000</color>
+    <color name="read_green">#0D00FF00</color>
+    <color name="not_read_yellow">#0DFFEB3B</color>
+    <color name="upcoming_purple">#0E9C27B0</color>
 </resources>

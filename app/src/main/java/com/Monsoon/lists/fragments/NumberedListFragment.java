@@ -85,6 +85,11 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
                             public void onTagsSelected(ArrayList<String> newTags) {
                                 // not used
                             }
+
+                            @Override
+                            public void onDateSelected(String date) {
+
+                            }
                         });
             }
         });
