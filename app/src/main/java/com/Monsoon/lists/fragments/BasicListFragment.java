@@ -140,4 +140,14 @@ private BasicList list;
     public void OnAllTagToFront() {
 
     }
+
+    @Override
+    public void EstimateReleaseDate() {
+
+    }
+
+    @Override
+    public void LoedBookReleaseTracker() {
+
+    }
 }

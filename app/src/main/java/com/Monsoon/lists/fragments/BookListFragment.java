@@ -298,6 +298,16 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
         );
     }
 
+    @Override
+    public void EstimateReleaseDate() {
+
+    }
+
+    @Override
+    public void LoedBookReleaseTracker() {
+
+    }
+
 
     @Override
     protected void bindTagTextToView(SpannableString spannableString) {

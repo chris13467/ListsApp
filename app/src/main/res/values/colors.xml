@@ -9,7 +9,7 @@
     <color name="blue">#FF0000FF</color>
     <color name="clear">#00000000</color>
     <color name="red">#FFFF0000</color>
-    <color name="read_green">#0D00FF00</color>
-    <color name="not_read_yellow">#0DFFEB3B</color>
-    <color name="upcoming_purple">#0E9C27B0</color>
+    <color name="read">#3F9B0B</color>
+    <color name="not_read">#2492d1</color>
+    <color name="upcoming">#FF9800</color>
 </resources>

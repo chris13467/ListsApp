@@ -213,4 +213,14 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
         // not used
     }
 
+    @Override
+    public void EstimateReleaseDate() {
+
+    }
+
+    @Override
+    public void LoedBookReleaseTracker() {
+
+    }
+
 }

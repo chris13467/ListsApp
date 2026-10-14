@@ -4,11 +4,15 @@ import com.Monsoon.lists.Lists.BookList;
 import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.util.Tags;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class BookSeriesItem extends BaseListItem {
-    private ArrayList<BookItem> booksInSeries;
+    private BookList booksInSeries;
+    private BookList upcomingBooks;
+    private LocalDate estimatedNewReleaseDate;
     private String author;
     private Tags tags;
     private static final long serialVersionUID = 1L;
@@ -16,49 +20,125 @@ public class BookSeriesItem extends BaseListItem {
 
     public BookSeriesItem(){
         super();
-        this.booksInSeries = new ArrayList<>();
+        this.booksInSeries = new BookList();
+        this.upcomingBooks = new BookList();
+        this.author = "";
         this.tags = new Tags();
+        estimatedNewReleaseDate = null;
 
     }
 
     public BookSeriesItem(String seriesName){
         super(seriesName);
-        this.booksInSeries = new ArrayList<>();
+        this.booksInSeries = new BookList();
+        this.upcomingBooks = new BookList();
+        this.author = "";
         this.tags = new Tags();
+        estimatedNewReleaseDate = null;
     }
 
     public void addBook(BookItem book){
         if (book.isUpcoming()){
-            booksInSeries.add(book);
+            upcomingBooks.addItem(book);
         } else {
-            int i;
-            for (i = booksInSeries.size()-1; i >= 0 && booksInSeries.get(i).isUpcoming(); i--);
-            booksInSeries.add(i + 1, book);
+            booksInSeries.addItem(book);
         }
     }
 
-    public boolean removeBook(BookItem book){
-        return booksInSeries.remove(book);
+    public BookList getUpcomingBooks(){
+        return upcomingBooks;
     }
 
-    public ArrayList<BookItem> getBooksInSeries(){
-        return booksInSeries;
+    public boolean removeBookFromBookSeries(BookItem book){
+        return booksInSeries.removeItem(book);
+    }
+
+    public boolean removeBookFromUpcomingBooks(BookItem book){
+        return upcomingBooks.removeItem(book);
+    }
+
+    public void moveBookFromUpcomingToSeries(BookItem book){
+        upcomingBooks.removeItem(book);
+        booksInSeries.addItem(book);
     }
 
     public BookList getBookList(){
-        return new BookList(booksInSeries);
+        return booksInSeries;
     }
 
     public void setTags(Tags tags){
-        tags.addTags(tags.getList());
+        this.tags.addTags(tags.getList());
     }
     public Tags getTags() {
         return tags;
     }
 
+    public int getNumberOfReleasedBooks(){
+        int count = 0;
+        for (BaseListItem item : booksInSeries.getList()){
+            if (!((BookItem) item).isUpcoming()) count++;
+        }
+        return count;
+    }
+
+    public int getNumberOfReadBooks(){
+        int count = 0;
+        for (BaseListItem item : booksInSeries.getList()){
+            if (((BookItem) item).isRead()) count++;
+        }
+        return count;
+    }
+
+    public BookItem getNextUpcomingBook(){
+        return (BookItem) upcomingBooks.getList().get(0);
+    }
 
     public boolean hasUpcomingBook(){
-        return booksInSeries.get(booksInSeries.size() - 1).isUpcoming();
+        return !upcomingBooks.getList().isEmpty();
+    }
+
+    public void clearSelections(){
+        booksInSeries.clearSelections();
+        upcomingBooks.clearSelections();
+    }
+
+    public void deleteSelections(){
+        booksInSeries.deleteSelected();
+        upcomingBooks.deleteSelected();
+    }
+
+    public BookItem getSelected(){
+        if (booksInSeries.getNumSelected() == 1 && upcomingBooks.getNumSelected() == 0) return (BookItem) booksInSeries.getSelected();
+        else if (upcomingBooks.getNumSelected() == 1 && booksInSeries.getNumSelected() == 0) return (BookItem) upcomingBooks.getSelected();
+        else return null;
+    }
+
+    public int getNumSelected(){
+        return booksInSeries.getNumSelected() + upcomingBooks.getNumSelected();
+    }
+
+    public void estimateNewReleaseDate(){
+        long totalDaysBetween = 0;
+        int count = 0;
+        LocalDate prev = null;
+        for (BaseListItem item : booksInSeries.getList()){
+            BookItem book = (BookItem) item;
+            if(book.getReleaseDate() != null){
+                if (prev != null) {
+                    totalDaysBetween += ChronoUnit.DAYS.between(prev, book.getReleaseDate());
+                    count++;
+                }
+                prev = book.getReleaseDate();
+            }
+        }
+        if (count > 0){
+            long averageIntervalDays = Math.round((double) totalDaysBetween / count);
+            estimatedNewReleaseDate = prev.plusDays(averageIntervalDays);
+        } else estimatedNewReleaseDate = null;
+    }
+
+    public LocalDate getEstimatedNewReleaseDate(){
+        return estimatedNewReleaseDate;
     }
 
     public void setAuthor(String author){

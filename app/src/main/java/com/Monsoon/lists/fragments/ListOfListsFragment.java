@@ -153,6 +153,16 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
     }
 
     @Override
+    public void EstimateReleaseDate() {
+
+    }
+
+    @Override
+    public void LoedBookReleaseTracker() {
+
+    }
+
+    @Override
     public void OnAddPressed() {
         mainActivityCallback.getPopupGenerator().showListSelectorPickerDialog(new Popups.PopupCallback() {
             @Override

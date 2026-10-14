@@ -158,4 +158,14 @@ public class BookSeriesListFragment extends AbstractListFragment<FragmentBookSer
     public void OnAllTagToFront() {
         // not used
     }
+
+    @Override
+    public void EstimateReleaseDate() {
+
+    }
+
+    @Override
+    public void LoedBookReleaseTracker() {
+
+    }
 }

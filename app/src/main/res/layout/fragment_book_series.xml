@@ -11,36 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <!-- Book stats section -->
-        <!-- Number of books in Series -->
-        <!-- Number of books read -->
-        <!-- Are there any upcoming releases -->
-        <!-- Series Tags -->
-
-        <!-- List of books in Series section -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/books_in_series_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/add_book_pane"
-            android:padding="16dp">
-
-
-        </androidx.recyclerview.widget.RecyclerView>
-
         <!-- add boot to Series section -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/add_book_pane"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/books_in_series_view"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/add_book_to_series"
+            app:layout_constraintBottom_toTopOf="@id/num_books_text_view"
             android:visibility="gone">
 
             <TextView
@@ -96,34 +75,111 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/is_upcoming"
-                app:layout_constraintBottom_toTopOf="@id/book_tags_text_view"/>
-
-            <TextView
-                android:id="@+id/book_tags_text_view"
-                android:padding="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tags: "
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/book_release_date_picker"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Book stats section -->
+        <!-- Author of Series -->
         <TextView
-            android:id="@+id/add_book_to_series"
-            android:layout_width="wrap_content"
+            android:id="@+id/series_author_text_view"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/blue"
-            android:text="@string/add_book_to_series"
             app:layout_constraintTop_toBottomOf="@id/add_book_pane"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/num_books_text_view"
+            app:layout_constraintBottom_toTopOf="@id/next_upcoming_release_text_view"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"/>
+        <!-- Number of books and number of books Read -->
+        <TextView
+            android:id="@+id/num_books_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(0/0)"
+            app:layout_constraintTop_toBottomOf="@id/add_book_pane"
+            app:layout_constraintStart_toEndOf="@id/series_author_text_view"
+            app:layout_constraintEnd_toStartOf="@id/diamond_icon"
+            app:layout_constraintBottom_toTopOf="@id/next_upcoming_release_text_view"
+            android:layout_marginTop="12dp"/>
+        <!-- Are there any upcoming releases -->
+        <ImageView
+            android:id="@+id/diamond_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/diamond_icon"
+            app:layout_constraintTop_toBottomOf="@id/add_book_pane"
+            app:layout_constraintStart_toEndOf="@id/num_books_text_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@id/next_upcoming_release_text_view"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"/>
+        <TextView
+            android:id="@+id/next_upcoming_release_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/num_books_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/book_series_tags_text_view"
+            android:layout_margin="12dp"/>
+
+        <TextView
+            android:id="@+id/book_series_tags_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/next_upcoming_release_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/books_in_series_view"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"/>
+        <!-- Series Tags -->
+
+        <!-- List of books in Series section -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/books_in_series_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/book_series_tags_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/upcoming_section_books"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/upcoming_section_books"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/books_in_series_view">
 
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/upcoming_books_in_series_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

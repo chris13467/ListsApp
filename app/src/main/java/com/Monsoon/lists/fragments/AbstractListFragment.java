@@ -74,7 +74,7 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
 
-                adapter.onItemMove(fromPosition, toPosition);
+                onItemMove(fromPosition, toPosition);
                 return true;
             }
 
@@ -94,9 +94,7 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
             @Override
             public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
-                viewHolder.itemView.setAlpha(1.0f);
-                OnDropClearView();
-                adapter.notifyDataSetChanged();
+                onClearView(viewHolder);
             }
         };
 
@@ -178,6 +176,16 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
 
     protected void bindTagTextToView(SpannableString spannableString){
         // do something when overloaded
+    }
+
+    protected void onItemMove(int fromPosition, int toPosition){
+        adapter.onItemMove(fromPosition, toPosition);
+    }
+
+    protected void onClearView(@NonNull RecyclerView.ViewHolder viewHolder){
+        viewHolder.itemView.setAlpha(1.0f);
+        OnDropClearView();
+        adapter.notifyDataSetChanged();
     }
 
 

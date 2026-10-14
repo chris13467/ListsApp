@@ -137,4 +137,14 @@ private TodoListAdapter adapter;
     public void OnAllTagToFront() {
 
     }
+
+    @Override
+    public void EstimateReleaseDate() {
+
+    }
+
+    @Override
+    public void LoedBookReleaseTracker() {
+
+    }
 }

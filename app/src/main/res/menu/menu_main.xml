@@ -12,7 +12,7 @@
     <!-- Const: MENU_DONE -->
     <item android:id="@+id/action_done"
         android:title="Done"
-        android:icon="@drawable/done_24dp"
+        android:icon="@drawable/check_24"
         android:orderInCategory="2"
         app:showAsAction="ifRoom" />
     <!-- Const: MENU_EDIT -->
@@ -65,6 +65,16 @@
     <item android:id="@+id/action_all_tag_to_front"
         android:title="All to front by tag"
         android:orderInCategory="24"
+        app:showAsAction="never" />
+    <!-- Const: MENU_CALC_NEW_RELEASE_DATE    -->
+    <item android:id="@+id/action_calc_new_release_date"
+        android:title="Calc new release date"
+        android:orderInCategory="25"
+        app:showAsAction="never" />
+    <!-- Const: MENU_SHOW_RELEASE_TRACKER    -->
+    <item android:id="@+id/action_show_release_tracker"
+        android:title="Book Release Tracker"
+        android:orderInCategory="26"
         app:showAsAction="never" />
     <!-- Const: MENU_RANDOMIZE -->
     <item android:id="@+id/action_randomize_list"

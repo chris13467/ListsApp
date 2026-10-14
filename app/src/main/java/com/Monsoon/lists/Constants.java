@@ -72,6 +72,8 @@ public class Constants {
     public static final int MENU_RANDOM_TO_FRONT = 8;
     public static final int MENU_RANDOM_TAG_TO_FRONT = 9;
     public static final int MENU_All_TAG_TO_FRONT = 10;
-    public static final int MENU_RANDOMIZE = 11;
-    public static final int MENU_SETTINGS = 12;
+    public static final int MENU_CALC_NEW_RELEASE_DATE = 11;
+    public static final int MENU_SHOW_RELEASE_TRACKER = 12;
+    public static final int MENU_RANDOMIZE = 13;
+    public static final int MENU_SETTINGS = 14;
 }

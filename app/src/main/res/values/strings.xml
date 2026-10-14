@@ -40,4 +40,5 @@
     <string name="enter_book_title">Enter Book Title (optional)</string>
     <string name="select_release_date">Select Release date (optional)</string>
     <string name="is_this_an_upcoming_book">Is this an upcoming book?</string>
+    <string name="release_date">Release Date:</string>
 </resources>

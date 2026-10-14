@@ -14,4 +14,6 @@ public interface OnMenuItemPressed {
     public void OnSelectAll(boolean b);
     public void OnRandomTagToFront();
     public void OnAllTagToFront();
+    public void EstimateReleaseDate();
+    public void LoedBookReleaseTracker();
 }

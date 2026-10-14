@@ -51,32 +51,8 @@ public class ListOfListsAdapter extends AbstractListAdapter<ListOfLists, ListOfL
             textContent.setText(item.getList().getName());
             listPreview.setLayoutManager(new LinearLayoutManager(listPreview.getContext()));
             switch (item.getList().getListType()){
-                case Constants.BASIC:
-                    BasicListAdapter basicListAdapter = new BasicListAdapter((BasicList) item.getList(), new onListItemClickedListener<BaseListItem>() {
-                        @Override
-                        public void onItemClick(BaseListItem item_b) {
-                            if (!isSelectMode) listener.onItemClick(item);
-                            else {
-                                item.setSelected(!item.isSelected());
-                                listener.onItemLongClick(item);
-                            }
-                        }
 
-                        @Override
-                        public void onItemLongClick(BaseListItem item) {
-
-                        }
-
-                        @Override
-                        public void onItemSelected(BaseListItem item) {
-
-                        }
-                    });
-                    listPreview.setAdapter(basicListAdapter);
-                    break;
-                case Constants.TODO:
-                case Constants.NUMBERED:
-                case Constants.BOOK:
+                default:
                     PreviewAdapter previewAdapter = new PreviewAdapter(item.getList(), new PreviewAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick() {

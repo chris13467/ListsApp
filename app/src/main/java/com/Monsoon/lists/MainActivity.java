@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.Monsoon.lists.Lists.BookSeriesList;
 import com.Monsoon.lists.Lists.ListOfLists;
 import com.Monsoon.lists.enums.MenuState;
 import com.Monsoon.lists.listeners.MainActivityCallback;
@@ -108,6 +109,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 break;
             case LIST_OF_LISTS_ADD_LIST:
@@ -124,6 +127,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 break;
             case LIST_OF_LISTS_SELECT_MODE:
@@ -140,6 +145,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(true);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 break;
             case NUMBERED_LIST_NORMAL:
@@ -156,8 +163,13 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 break;
             case NUMBERED_LIST_ADD_ITEM:
+            case BOOK_LIST_ADD:
+            case BOOK_SERIES_LIST_ADD:
+            case BOOK_SERIES_ADD:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
                 menu.getItem(Constants.MENU_ADD).setVisible(false);
                 menu.getItem(Constants.MENU_DONE).setVisible(true);
@@ -171,6 +183,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 break;
             case NUMBERED_LIST_SELECT_MODE:
                 oneSelected = lists.getCurrentList().getNumSelected() == 1;
@@ -187,6 +201,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(true);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 break;
             case BOOK_LIST_NORMAL:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(true);
@@ -202,21 +218,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(true);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(true);
-                break;
-            case BOOK_LIST_ADD:
-                menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
-                menu.getItem(Constants.MENU_ADD).setVisible(false);
-                menu.getItem(Constants.MENU_DONE).setVisible(true);
-                menu.getItem(Constants.MENU_DELETE).setVisible(false);
-                menu.getItem(Constants.MENU_RANDOMIZE).setVisible(false);
-                menu.getItem(Constants.MENU_EDIT).setVisible(false);
-                menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
-                menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
-                menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
-                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
-                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
-                menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
-                menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 break;
             case BOOK_LIST_SELECT_MODE:
                 oneSelected = lists.getCurrentList().getNumSelected() == 1;
@@ -233,6 +236,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(true);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 break;
             case BOOK_SERIES_LIST_NORMAL:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(true);
@@ -248,21 +253,8 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
-                break;
-            case BOOK_SERIES_LIST_ADD:
-                menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
-                menu.getItem(Constants.MENU_ADD).setVisible(false);
-                menu.getItem(Constants.MENU_DONE).setVisible(true);
-                menu.getItem(Constants.MENU_DELETE).setVisible(false);
-                menu.getItem(Constants.MENU_RANDOMIZE).setVisible(false);
-                menu.getItem(Constants.MENU_EDIT).setVisible(false);
-                menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
-                menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
-                menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
-                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
-                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
-                menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
-                menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(true);
                 break;
             case BOOK_SERIES_LIST_SELECT_MODE:
                 oneSelected = lists.getCurrentList().getNumSelected() == 1;
@@ -279,10 +271,12 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(true);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 break;
-            case BOOK_SERIES:
+            case BOOK_SERIES_NORMAL:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
-                menu.getItem(Constants.MENU_ADD).setVisible(false);
+                menu.getItem(Constants.MENU_ADD).setVisible(true);
                 menu.getItem(Constants.MENU_DONE).setVisible(false);
                 menu.getItem(Constants.MENU_DELETE).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOMIZE).setVisible(false);
@@ -294,6 +288,26 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(true);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
+                break;
+            case BOOK_SERIES_SELECT_MODE:
+                oneSelected = ((BookSeriesList)lists.getCurrentList()).getCurrentItem().getNumSelected() == 1;
+                menu.getItem(Constants.MENU_SETTINGS).setVisible(false);
+                menu.getItem(Constants.MENU_ADD).setVisible(false);
+                menu.getItem(Constants.MENU_DONE).setVisible(false);
+                menu.getItem(Constants.MENU_DELETE).setVisible(true);
+                menu.getItem(Constants.MENU_RANDOMIZE).setVisible(false);
+                menu.getItem(Constants.MENU_EDIT).setVisible(oneSelected);
+                menu.getItem(Constants.MENU_MOVE_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_MOVE_TO_BACK).setVisible(false);
+                menu.getItem(Constants.MENU_RANDOM_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_SELECT_ALL).setVisible(false);
+                menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
+                menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
                 break;
             default:
                 menu.getItem(Constants.MENU_SETTINGS).setVisible(true);
@@ -309,6 +323,9 @@ private Popups popups;
                 menu.getItem(Constants.MENU_DESELECT_ALL).setVisible(false);
                 menu.getItem(Constants.MENU_RANDOM_TAG_TO_FRONT).setVisible(false);
                 menu.getItem(Constants.MENU_All_TAG_TO_FRONT).setVisible(false);
+                menu.getItem(Constants.MENU_CALC_NEW_RELEASE_DATE).setVisible(false);
+                menu.getItem(Constants.MENU_SHOW_RELEASE_TRACKER).setVisible(false);
+
         }
         return true;
     }
@@ -367,6 +384,13 @@ private Popups popups;
 
         if (id == R.id.action_all_tag_to_front){
             menuListener.OnAllTagToFront();
+        }
+        if (id == R.id.action_calc_new_release_date){
+            menuListener.EstimateReleaseDate();
+        }
+
+        if (id == R.id.action_show_release_tracker){
+            menuListener.LoedBookReleaseTracker();
         }
 
         return super.onOptionsItemSelected(item);

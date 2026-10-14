@@ -67,6 +67,10 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.ViewHold
                     sb.append(((BookItem)item).getPosition() + 1).append(" - ").append(item.getContents());
                     basicListView.setText(sb.toString());
                     break;
+                default:
+                    sb.append(item.getContents());
+                    basicListView.setText(sb.toString());
+                    break;
             }
 
 
