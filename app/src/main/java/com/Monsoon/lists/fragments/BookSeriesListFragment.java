@@ -2,6 +2,7 @@ package com.Monsoon.lists.fragments;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.Monsoon.lists.Adapters.BookSeriesListAdapter;
 
+import com.Monsoon.lists.Constants;
+import com.Monsoon.lists.ListItems.BookItem;
 import com.Monsoon.lists.ListItems.BookSeriesItem;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 import com.Monsoon.lists.Lists.BookList;
 import com.Monsoon.lists.Lists.BookSeriesList;
 import com.Monsoon.lists.R;
@@ -82,16 +86,21 @@ public class BookSeriesListFragment extends AbstractListFragment<FragmentBookSer
         binding.bookSeriesItemAdd.setVisibility(View.VISIBLE);
         binding.bookSeriesItemContentInput.requestFocus();
         mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_LIST_ADD);
+        adapter.setItemsClickable(false);
     }
 
     @Override
     public void OnDonePressed() {
+        if (mainActivityCallback.getMenuState() == MenuState.BOOK_SERIES_LIST_EDIT){
+            list.removeItem(editItem);
+        }
         list.addItem(new BookSeriesItem(binding.bookSeriesItemContentInput.getText().toString()));
         adapter.notifyDataSetChanged();
         binding.bookSeriesItemContentInput.setText("");
         binding.bookSeriesItemAdd.setVisibility(View.GONE);
         mainActivityCallback.OnListChange();
         mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_LIST_NORMAL);
+        adapter.setItemsClickable(true);
     }
 
     @Override
@@ -108,9 +117,11 @@ public class BookSeriesListFragment extends AbstractListFragment<FragmentBookSer
                 NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
                 break;
             case BOOK_SERIES_LIST_ADD:
+            case BOOK_SERIES_LIST_EDIT:
                 binding.bookSeriesItemContentInput.setText("");
                 binding.bookSeriesItemAdd.setVisibility(View.GONE);
                 mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_LIST_NORMAL);
+                adapter.setItemsClickable(true);
                 break;
             case BOOK_SERIES_LIST_SELECT_MODE:
                 exitSelectMode(MenuState.BOOK_SERIES_LIST_NORMAL);
@@ -120,52 +131,45 @@ public class BookSeriesListFragment extends AbstractListFragment<FragmentBookSer
     }
 
     @Override
-    public void OnRandomizePressed() {
-        // not used
+    public void OnAddToOtherPressed() {
+        editItem = (BookSeriesItem) list.getSelected();
+        mainActivityCallback.getPopupGenerator().showMoveListSelector(
+                mainActivityCallback.getUserLists(),
+                list, editItem,
+                new Popups.PopupCallback() {
+                    @Override
+                    public void onListSelected(ListOfListsWrapper list) {
+                        BookSeriesListFragment.this.list.removeItem(editItem);
+                        editItem.setSelected(false);
+                        switch (list.getList().getListType()){
+                            case Constants.BOOK_SERIES:
+                                list.getList().addItem(editItem);
+                                break;
+                            default:
+                                Log.d("ERROR", "onListSelected: Incompatible List types");
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        mainActivityCallback.OnListChange();
+                        exitSelectMode(MenuState.BOOK_SERIES_LIST_NORMAL);
+                    }
+                }
+        );
     }
 
     @Override
     public void OnEditPressed() {
-        BookSeriesItem editItem = (BookSeriesItem) list.getSelected();
+        editItem = (BookSeriesItem) list.getSelected();
         binding.bookSeriesItemContentInput.setText(editItem.getContents());
-        list.removeItem(editItem);
         binding.bookSeriesItemAdd.setVisibility(View.VISIBLE);
-        mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_LIST_ADD);
+        mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_LIST_EDIT);
+        adapter.setItemsClickable(false);
         mainActivityCallback.OnListChange();
     }
 
     @Override
-    public void OnMoveToFrontPressed() {
-        // not used
-    }
-
-    @Override
-    public void OnMoveToBackPressed() {
-        // not used
-    }
-
-    @Override
-    public void OnRandomToFront() {
-        // not used
-    }
-
-    @Override
-    public void OnRandomTagToFront() {
-        // not used
-    }
-
-    @Override
-    public void OnAllTagToFront() {
-        // not used
-    }
-
-    @Override
-    public void EstimateReleaseDate() {
-
-    }
-
-    @Override
-    public void LoedBookReleaseTracker() {
-
+    public void LoadBookReleaseTracker() {
+        NavHostFragment.findNavController(BookSeriesListFragment.this).
+                navigate(R.id.action_load_series_release_tracker);
     }
 }

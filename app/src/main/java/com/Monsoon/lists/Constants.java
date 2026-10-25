@@ -67,13 +67,18 @@ public class Constants {
     public static final int MENU_DELETE = 3;
     public static final int MENU_SELECT_ALL = 4;
     public static final int MENU_DESELECT_ALL = 5;
-    public static final int MENU_MOVE_TO_FRONT = 6;
-    public static final int MENU_MOVE_TO_BACK = 7;
-    public static final int MENU_RANDOM_TO_FRONT = 8;
-    public static final int MENU_RANDOM_TAG_TO_FRONT = 9;
-    public static final int MENU_All_TAG_TO_FRONT = 10;
-    public static final int MENU_CALC_NEW_RELEASE_DATE = 11;
-    public static final int MENU_SHOW_RELEASE_TRACKER = 12;
-    public static final int MENU_RANDOMIZE = 13;
-    public static final int MENU_SETTINGS = 14;
+    public static final int MENU_LOCK = 6;
+    public static final int MENU_UNLOCK = 7;
+    public static final int MENU_MOVE_TO_FRONT = 8;
+    public static final int MENU_MOVE_TO_BACK = 9;
+    public static final int MENU_RANDOM_TO_FRONT = 10;
+    public static final int MENU_RANDOM_TAG_TO_FRONT = 11;
+    public static final int MENU_All_TAG_TO_FRONT = 12;
+    public static final int MENU_CALC_NEW_RELEASE_DATE = 13;
+    public static final int MENU_SHOW_RELEASE_TRACKER = 14;
+    public static final int MENU_RANDOMIZE = 15;
+    public static final int MENU_ADD_TO_OTHER_LIST = 16;
+    public static final int MENU_CHANGE_LIST_NAME = 17;
+    public static final int MENU_INFO = 18;
+    public static final int MENU_SETTINGS = 19;
 }

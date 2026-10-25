@@ -34,7 +34,9 @@ public abstract class ListsViewHolder<I extends BaseListItem> extends RecyclerVi
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               onListItemClicked(item, listener, isSelectMode);
+                if (item.isClickable()){
+                    onListItemClicked(item, listener, isSelectMode);
+                }
             }
         });
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -46,9 +48,10 @@ public abstract class ListsViewHolder<I extends BaseListItem> extends RecyclerVi
     }
 
     protected void onListItemClicked(I item, onListItemClickedListener<I> listener, boolean isSelectMode){
-        item.setSelected(!item.isSelected());
-        listener.onItemClick(item);
+            item.setSelected(!item.isSelected());
+            listener.onItemClick(item);
     }
+
 
     protected boolean onListItemLongClicked(I item, onListItemClickedListener<I> listener, boolean isSelectMode){
         listener.onItemLongClick(item);

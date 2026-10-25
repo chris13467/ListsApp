@@ -41,6 +41,16 @@
         android:title="Deselect all"
         android:orderInCategory="12"
         app:showAsAction="never" />
+    <!-- Const: MENU_LOCK -->
+    <item android:id="@+id/action_lock"
+        android:title="Lock position"
+        android:orderInCategory="13"
+        app:showAsAction="never" />
+    <!-- Const: MENU_UNLOCK -->
+    <item android:id="@+id/action_unlock"
+        android:title="Unlock position"
+        android:orderInCategory="14"
+        app:showAsAction="never" />
     <!-- Const: MENU_MOVE_TO_FRONT -->
     <item android:id="@+id/action_move_to_front"
         android:title="Move To front"
@@ -80,6 +90,22 @@
     <item android:id="@+id/action_randomize_list"
         android:title="Randomize"
         android:orderInCategory="30"
+        app:showAsAction="never" />
+
+    <!-- Const: MENU_ADD_TO_OTHER_LIST -->
+    <item android:id="@+id/action_add_to_other_list"
+        android:title="Add to other list"
+        android:orderInCategory="97"
+        app:showAsAction="never" />
+    <!-- Const: MENU_CHANGE_LIST_NAME -->
+    <item android:id="@+id/action_change_list_name"
+        android:title="Change list name"
+        android:orderInCategory="98"
+        app:showAsAction="never" />
+    <!-- Const: MENU_INFO -->
+    <item android:id="@+id/action_info"
+        android:title="info"
+        android:orderInCategory="99"
         app:showAsAction="never" />
 
     <!-- Settings will have orderInCategory 100 -->

@@ -17,9 +17,6 @@ public interface MainActivityCallback {
     public Settings getSettings();
     public MenuState getMenuState();
     public Popups getPopupGenerator();
-
-
-
-
+    public void assignIds();
 
 }

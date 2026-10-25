@@ -27,7 +27,8 @@ public abstract class AbstractListAdapter<L, I extends BaseListItem, VH extends 
 
     protected L data;
     protected onListItemClickedListener<I> listener;
-    boolean isSelectMode;
+    protected boolean isSelectMode;
+    protected boolean itemsClickable;
 
     protected abstract I getCurrentItem(int position);
 
@@ -35,6 +36,7 @@ public abstract class AbstractListAdapter<L, I extends BaseListItem, VH extends 
         this.data = data;
         this.listener = listener;
         this.isSelectMode = false;
+        this.itemsClickable = true;
     }
 
     @Override
@@ -60,6 +62,14 @@ public abstract class AbstractListAdapter<L, I extends BaseListItem, VH extends 
             notifyItemMoved(fromPosition, toPosition);
         }
 
+    }
+
+    public void setItemsClickable(boolean clickable){
+        if (data instanceof baseList){
+            for (BaseListItem item : ((baseList) data).getList()){
+                item.setClickable(clickable);
+            }
+        }
     }
 
 }

@@ -6,14 +6,35 @@ public interface OnMenuItemPressed {
     public void OnDonePressed();
     public void OnDeletePressed();
     public void OnBackPressed();
-    public void OnRandomizePressed();
+    default public void OnRandomizePressed(){
+        // not used
+    }
     public void OnEditPressed();
-    public void OnMoveToFrontPressed();
-    public void OnMoveToBackPressed();
-    public void OnRandomToFront();
+    default public void OnMoveToFrontPressed(){
+        // not used
+    }
+    default public void OnMoveToBackPressed(){
+        // not used
+    }
+    default public void OnRandomToFront(){
+        // not used
+    }
     public void OnSelectAll(boolean b);
-    public void OnRandomTagToFront();
-    public void OnAllTagToFront();
-    public void EstimateReleaseDate();
-    public void LoedBookReleaseTracker();
+    default public void OnRandomTagToFront(){
+        // not used
+    }
+    default public void OnAllTagToFront(){
+        // not used
+    }
+    default public void EstimateReleaseDate(){
+        // not used
+    }
+    default public void LoadBookReleaseTracker(){
+        // not used
+    }
+    public void OnChangeTitle();
+    default public void OnAddToOtherPressed(){
+        // not used
+    }
+    public void OnLockChange(boolean locked);
 }

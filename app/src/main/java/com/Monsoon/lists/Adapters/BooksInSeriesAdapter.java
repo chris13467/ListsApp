@@ -55,14 +55,14 @@ public class BooksInSeriesAdapter extends AbstractListAdapter<BookList, BookItem
                 releaseDate.setText(new StringBuilder("Release Date: ").append(
                         item.getReleaseDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))));
             if (item.isUpcoming()){
-                actionUpdate.setBackgroundColor(ContextCompat.getColor(actionUpdate.getContext(),R.color.upcoming));
+                actionUpdate.setBackgroundColor(ContextCompat.getColor(actionUpdate.getContext(),R.color.read_with_upcoming));
                 actionUpdate.setText("Release");
             } else {
                 if (item.isRead()){
-                    actionUpdate.setBackgroundColor(ContextCompat.getColor(actionUpdate.getContext(),R.color.read));
+                    actionUpdate.setBackgroundColor(ContextCompat.getColor(actionUpdate.getContext(),R.color.read_no_upcoming));
                     actionUpdate.setText(" Read  ");
                 } else {
-                    actionUpdate.setBackgroundColor(ContextCompat.getColor(actionUpdate.getContext(),R.color.not_read));
+                    actionUpdate.setBackgroundColor(ContextCompat.getColor(actionUpdate.getContext(),R.color.not_read_no_upcoming));
                     actionUpdate.setText("Unread ");
                 }
             }

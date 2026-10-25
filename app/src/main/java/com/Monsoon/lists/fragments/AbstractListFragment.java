@@ -21,6 +21,7 @@ import com.Monsoon.lists.Adapters.AbstractListAdapter;
 import com.Monsoon.lists.Adapters.ListsViewHolder;
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BaseListItem;
+import com.Monsoon.lists.Lists.NumberedList;
 import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.MainActivity;
 import com.Monsoon.lists.enums.ListType;
@@ -37,6 +38,7 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
     protected B binding;
     protected AbstractListAdapter<L, I, VH> adapter;
     protected L list;
+    protected I editItem;
     protected MainActivityCallback mainActivityCallback;
 
 
@@ -54,7 +56,10 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
         mainActivityCallback.changeToolbarTitle(list.getName());
         mainActivityCallback.setMenuListener(this);
         onChildViewCreated();
-
+        if (list.isFirstLoad()){
+            setListTitle();
+            list.onFirstLoad();
+        }
     }
 
     protected void exitSelectMode(MenuState menuState){
@@ -63,6 +68,7 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
         adapter.notifyDataSetChanged();
         list.clearSelections();
     }
+
 
     protected void setupDragAndDrop(RecyclerView view) {
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(
@@ -106,11 +112,25 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
     protected abstract void OnDropClearView();
 
     @Override
+    public void OnChangeTitle(){
+        setListTitle();
+    }
+
+    @Override
     public void OnSelectAll(boolean b) {
         for (int i = 0; i < list.getList().size(); i++){
             list.getList().get(i).setSelected(b);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void OnLockChange(boolean locked) {
+        if (list instanceof NumberedList){
+            ((NumberedList) list).setSelectedLockedState(locked);
+        }
+        adapter.notifyDataSetChanged();
+        mainActivityCallback.OnListChange();
     }
 
     protected void setTagText(Tags tags){
@@ -125,28 +145,8 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
                         false,
                         new Popups.PopupCallback() {
                             @Override
-                            public void onNumberSelected(int num) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onListTypeSelected(ListType listType) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagClicked(int pos) {
-                                // not used
-                            }
-
-                            @Override
                             public void onTagsSelected(ArrayList<String> newTags) {
                                 ResolveTagsSelected(newTags);
-                            }
-
-                            @Override
-                            public void onDateSelected(String date) {
-
                             }
                         }
                 );
@@ -188,5 +188,15 @@ abstract public class AbstractListFragment<B, L extends baseList, I extends Base
         adapter.notifyDataSetChanged();
     }
 
+    protected void setListTitle(){
+        mainActivityCallback.getPopupGenerator().showTextInputDialog("Enter List Title", "Enter Title", new Popups.PopupCallback() {
+            @Override
+            public void onStringInput(String s) {
+                list.setName_(s);
+                mainActivityCallback.changeToolbarTitle(s);
+                mainActivityCallback.OnListChange();
+            }
+        });
+    }
 
 }

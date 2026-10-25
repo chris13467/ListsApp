@@ -10,15 +10,25 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.Monsoon.lists.Adapters.ListOfListsAdapter;
+import com.Monsoon.lists.Constants;
+import com.Monsoon.lists.ListItems.BaseListItem;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
+import com.Monsoon.lists.Lists.ListOfLists;
+import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.R;
+import com.Monsoon.lists.Settings;
 import com.Monsoon.lists.enums.ListType;
+import com.Monsoon.lists.listeners.onListItemClickedListener;
 import com.Monsoon.lists.util.Tags;
 
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,11 +38,28 @@ public class Popups {
     private LayoutInflater inflater;
 
     public interface PopupCallback{
-        public void onNumberSelected(int num);
-        public void onListTypeSelected(ListType listType);
-        public void onTagClicked(int pos);
-        public void onTagsSelected(ArrayList<String> newTags);
-        public void onDateSelected(String date);
+        default public void onNumberSelected(int num){
+            // not used
+        }
+        default public void onListTypeSelected(ListType listType){
+            // not used
+        }
+        default public void onTagClicked(int pos){
+            // not used
+        }
+        default public void onStringInput(String s){
+            // not used
+        }
+        default public void onTagsSelected(ArrayList<String> newTags){
+            // not used
+        }
+        default public void onDateSelected(String date){
+            // not used
+        }
+
+        default public void onListSelected(ListOfListsWrapper list){
+            // not used
+        }
     }
 
     public Popups(Context context, LayoutInflater inflater){
@@ -54,8 +81,6 @@ public class Popups {
         builder.setTitle("Select a list Type");
         builder.setView(dialogView);
 
-        AlertDialog dialog = builder.create();
-
         // Set negative (Cancel) button action
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -64,33 +89,14 @@ public class Popups {
             }
         });
 
-        listSelector.setAdapter(new listPIckerAdapter(new PopupCallback() {
-            @Override
-            public void onNumberSelected(int num) {
-                // not used
-            }
+        AlertDialog dialog = builder.create();
 
+        listSelector.setAdapter(new listPIckerAdapter(new PopupCallback() {
             @Override
             public void onListTypeSelected(ListType listType) {
                 callback.onListTypeSelected(listType);
                 dialog.dismiss();
             }
-
-            @Override
-            public void onTagClicked(int pos) {
-                // not used
-            }
-
-            @Override
-            public void onTagsSelected(ArrayList<String> newTags) {
-                // not used
-            }
-
-            @Override
-            public void onDateSelected(String date) {
-
-            }
-
         }));
 
         // Show the dialog
@@ -116,15 +122,6 @@ public class Popups {
 
 
         tagSelectorAdapter adapter = new tagSelectorAdapter(tags, new PopupCallback() {
-            @Override
-            public void onNumberSelected(int num) {
-                // not used
-            }
-
-            @Override
-            public void onListTypeSelected(ListType listType) {
-                // not used
-            }
 
             @Override
             public void onTagClicked(int pos) {
@@ -132,15 +129,6 @@ public class Popups {
                 tags.getSelectedTags().set(pos, !tags.getSelectedTags().get(pos));
             }
 
-            @Override
-            public void onTagsSelected(ArrayList<String> newTags) {
-                // not used
-            }
-
-            @Override
-            public void onDateSelected(String date) {
-
-            }
         });
 
         // Set positive (OK) button action
@@ -230,6 +218,125 @@ public class Popups {
     }
 
     public void showDatePickerDialog(PopupCallback callback) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                context,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay) {
+                        calendar.set(Calendar.YEAR, selectedYear);
+                        calendar.set(Calendar.MONTH, selectedMonth);
+                        calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+                        String formattedDate = sdf.format(calendar.getTime());
+
+                        if (callback != null) {
+                            callback.onDateSelected(formattedDate);
+                        }
+                    }
+                },
+                year,
+                month,
+                day
+        );
+
+        // Show the dialog
+        datePickerDialog.show();
+    }
+
+    public void showTextInputDialog(String title, String hint, PopupCallback callback) {
+        // Inflate the custom layout
+        View dialogView = inflater.inflate(R.layout.text_input_dialog, null);
+
+        // Initialize the NumberPicker from the custom layout
+        EditText input = dialogView.findViewById(R.id.input_box);
+        input.setHint(hint);
+
+        // Build the AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setView(dialogView);
+
+        // Set positive (OK) button action
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                callback.onStringInput(input.getText().toString());
+            }
+        });
+
+        // Set negative (Cancel) button action
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        // Show the dialog
+        builder.create().show();
+    }
+
+    public void showMoveListSelector(ListOfLists lists, baseList callingList, BaseListItem item, PopupCallback callback) {
+        ListOfLists selectableLists = lists.getCompatibleLists(callingList, item);
+        if (!selectableLists.getList().isEmpty()) {
+
+            // Inflate the custom layout
+            View dialogView = inflater.inflate(R.layout.list_of_lists_fragment, null);
+
+            // Build the AlertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Select list");
+            builder.setView(dialogView);
+
+
+            // Set negative (Cancel) button action
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+
+            ListOfListsAdapter adapter = new ListOfListsAdapter(selectableLists, new onListItemClickedListener<ListOfListsWrapper>() {
+                @Override
+                public void onItemClick(ListOfListsWrapper item) {
+                    callback.onListSelected(item);
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onItemLongClick(ListOfListsWrapper item) {
+
+                }
+
+                @Override
+                public void onItemSelected(ListOfListsWrapper item) {
+
+                }
+            });
+
+            RecyclerView listsView = dialogView.findViewById(R.id.ListsView);
+            listsView.setLayoutManager(new GridLayoutManager(context, Constants.NUM_COLOMNS));
+            listsView.setAdapter(adapter);
+
+            // Show the dialog
+            dialog.show();
+        } else {
+            Toast.makeText(context, "No compatible Lists", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //TODO
+    public void showInfoDialog(PopupCallback callback) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);

@@ -38,6 +38,21 @@
             app:layout_constraintStart_toEndOf="@id/book_number_view"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/lock_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="lock icon"
+                android:src="@drawable/baseline_lock_open_24"/>
+
+        </FrameLayout>
+
+
+
 
     </LinearLayout>
 

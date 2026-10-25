@@ -41,13 +41,16 @@ public class BookSeriesListAdapter extends AbstractListAdapter<BookSeriesList, B
 
             if (item.getNumberOfReleasedBooks() == item.getNumberOfReadBooks() && item.hasUpcomingBook()){
                 circleIcon.setImageTintList(ColorStateList.valueOf(
-                        ContextCompat.getColor(itemView.getContext(), R.color.upcoming)));
+                        ContextCompat.getColor(itemView.getContext(), R.color.read_with_upcoming)));
             } else if (item.getNumberOfReleasedBooks() == item.getNumberOfReadBooks()){
                 circleIcon.setImageTintList(ColorStateList.valueOf(
-                        ContextCompat.getColor(itemView.getContext(), R.color.read)));
-            } else {
+                        ContextCompat.getColor(itemView.getContext(), R.color.read_no_upcoming)));
+            } else if (item.hasUpcomingBook()) {
                 circleIcon.setImageTintList(ColorStateList.valueOf(
-                        ContextCompat.getColor(itemView.getContext(), R.color.not_read)));
+                        ContextCompat.getColor(itemView.getContext(), R.color.not_read_with_upcoming)));
+            }else {
+                circleIcon.setImageTintList(ColorStateList.valueOf(
+                        ContextCompat.getColor(itemView.getContext(), R.color.not_read_no_upcoming)));
             }
             tagTextView.setText(Util.getTagsString(item.getTags(), false));
         }

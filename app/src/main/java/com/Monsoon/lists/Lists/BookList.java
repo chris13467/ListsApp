@@ -32,7 +32,10 @@ public class BookList extends NumberedList {
         int j = 0;
         for (int i = 0; i < items_.size(); i++){
             BookItem currentItem = (BookItem) items_.get(i);
-            if (currentItem.getTags().containsTag(tag)) {
+            while (j < items_.size() && ((BookItem) items_.get(j)).isLocked()) j++;
+            if (currentItem.getTags().containsTag(tag) &&
+                    !currentItem.isLocked() &&
+                    j < items_.size()) {
                 Collections.swap(items_, i, j);
                 j++;
             }

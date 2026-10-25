@@ -15,6 +15,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 import com.Monsoon.lists.Adapters.BookListAdapter;
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BookItem;
+import com.Monsoon.lists.ListItems.BookSeriesItem;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 import com.Monsoon.lists.ListItems.NumberedItem;
 import com.Monsoon.lists.Lists.BookList;
 import com.Monsoon.lists.R;
@@ -39,6 +42,7 @@ import java.util.ArrayList;
 public class BookListFragment extends AbstractListFragment<FragmentBookListBinding, BookList, BookItem, BookListAdapter.ViewHolder> {
 
     private Tags newBookTags;
+    private int frontIndex;
 
     @Override
     public View onCreateView(
@@ -83,26 +87,6 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
                             public void onNumberSelected(int num) {
                                 binding.newListNumber.setText(String.valueOf(num));
                             }
-
-                            @Override
-                            public void onListTypeSelected(ListType listType) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagClicked(int pos) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagsSelected(ArrayList<String> newTags) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onDateSelected(String date) {
-
-                            }
                         }
                 );
             }
@@ -117,6 +101,42 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
     }
 
     @Override
+    public void OnAddToOtherPressed() {
+        editItem = (BookItem) list.getSelected();
+        mainActivityCallback.getPopupGenerator().showMoveListSelector(
+                mainActivityCallback.getUserLists(),
+                list, editItem,
+                new Popups.PopupCallback() {
+                    @Override
+                    public void onListSelected(ListOfListsWrapper list) {
+                        BookListFragment.this.list.removeItem(editItem);
+                        editItem.setPosition(1);
+                        editItem.setSelected(false);
+                        editItem.setLock(false);
+                        switch (list.getList().getListType()){
+                            case Constants.BOOK:
+                                list.getList().addItem(editItem);
+                                break;
+                            case Constants.BOOK_SERIES:
+                                BookSeriesItem newSeries = new BookSeriesItem(editItem.getContents());
+                                newSeries.setTags(editItem.getTags());
+                                editItem.setSeriesTitle(editItem.getContents());
+                                newSeries.addBook(editItem);
+                                list.getList().addItem(newSeries);
+                                break;
+                            default:
+                                Log.d("ERROR", "onListSelected: Incompatible List types");
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        mainActivityCallback.OnListChange();
+                        exitSelectMode(MenuState.BOOK_LIST_NORMAL);
+                    }
+                }
+        );
+    }
+
+    @Override
     protected void OnDropClearView() {
         list.reassignPositions();
     }
@@ -128,10 +148,14 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
         binding.bookItemAdd.setVisibility(View.VISIBLE);
         binding.bookItemContentInput.requestFocus();
         mainActivityCallback.onMenuContextChanged(MenuState.BOOK_LIST_ADD);
+        adapter.setItemsClickable(false);
     }
 
     @Override
     public void OnDonePressed() {
+        if (mainActivityCallback.getMenuState() == MenuState.BOOK_LIST_EDIT){
+            list.removeItem(editItem);
+        }
         list.addItem(new BookItem(
                 binding.bookItemContentInput.getText().toString(), newBookTags),
                 Integer.parseInt(binding.newListNumber.getText().toString())
@@ -143,6 +167,7 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
         mainActivityCallback.OnListChange();
         mainActivityCallback.getSettings().getUserTages().clearSelections();
         mainActivityCallback.onMenuContextChanged(MenuState.BOOK_LIST_NORMAL);
+        adapter.setItemsClickable(true);
     }
 
     @Override
@@ -159,10 +184,12 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
                 NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
                 break;
             case BOOK_LIST_ADD:
+            case BOOK_LIST_EDIT:
                 binding.bookItemContentInput.setText("");
                 binding.newListNumber.setText("1");
                 binding.bookItemAdd.setVisibility(View.GONE);
                 mainActivityCallback.onMenuContextChanged(MenuState.BOOK_LIST_NORMAL);
+                adapter.setItemsClickable(true);
                 break;
             case BOOK_LIST_SELECT_MODE:
                 exitSelectMode(MenuState.BOOK_LIST_NORMAL);
@@ -180,82 +207,81 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
 
     @Override
     public void OnEditPressed() {
-        BookItem editItem = (BookItem) list.getSelected();
+        editItem = (BookItem) list.getSelected();
         binding.newListNumber.setText(String.valueOf(editItem.getPosition() + 1));
         binding.bookItemContentInput.setText(editItem.getContents());
         newBookTags = new Tags();
         newBookTags.addTags(editItem.getTags().getList());
         setTagText(newBookTags);
-        list.removeItem(editItem);
         binding.bookItemAdd.setVisibility(View.VISIBLE);
-        mainActivityCallback.onMenuContextChanged(MenuState.BOOK_LIST_ADD);
+        mainActivityCallback.onMenuContextChanged(MenuState.BOOK_LIST_EDIT);
+        adapter.setItemsClickable(false);
         mainActivityCallback.OnListChange();
     }
 
     @Override
     public void OnMoveToFrontPressed() {
         BookItem item = (BookItem) list.getSelected();
-        adapter.onItemMove(item.getPosition(), 0);
-        list.reassignPositions();
-        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
-        mainActivityCallback.OnListChange();
+        frontIndex = 0;
+        while (frontIndex < list.getList().size() &&
+                ((BookItem)list.getList().get(frontIndex)).isLocked()) frontIndex++;
+        if (!item.isLocked() && frontIndex < list.getList().size()) {
+            adapter.onItemMove(item.getPosition(), frontIndex);
+            list.reassignPositions();
+            new Handler(Looper.getMainLooper()).postDelayed(() -> exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
+            mainActivityCallback.OnListChange();
+        }
     }
 
     @Override
     public void OnMoveToBackPressed() {
         BookItem item = (BookItem) list.getSelected();
-        adapter.onItemMove(item.getPosition(), list.getList().size() - 1);
-        list.reassignPositions();
-        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
-        mainActivityCallback.OnListChange();
+        int backIndex = list.getList().size() - 1;
+        while (backIndex > 0 &&
+                ((BookItem)list.getList().get(backIndex)).isLocked()) backIndex--;
+        if (!item.isLocked() && backIndex > 0) {
+            adapter.onItemMove(item.getPosition(), backIndex);
+            list.reassignPositions();
+            new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
+            mainActivityCallback.OnListChange();
+        }
     }
 
     @Override
     public void OnRandomToFront() {
         BookItem item = (BookItem) list.getRandomItem();
-        adapter.onItemMove(item.getPosition(), 0);
-        list.reassignPositions();
-        new Handler(Looper.getMainLooper()).postDelayed(()->exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
-        mainActivityCallback.OnListChange();
+        frontIndex = 0;
+        while (frontIndex < list.getList().size() &&
+                ((BookItem)list.getList().get(frontIndex)).isLocked()) frontIndex++;
+        if (!item.isLocked() && frontIndex < list.getList().size()) {
+            adapter.onItemMove(item.getPosition(), frontIndex);
+            list.reassignPositions();
+            new Handler(Looper.getMainLooper()).postDelayed(() -> exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
+            mainActivityCallback.OnListChange();
+        }
     }
 
     @Override
     public void OnRandomTagToFront() {
+        frontIndex = 0;
+        while (frontIndex < list.getList().size() &&
+                ((BookItem)list.getList().get(frontIndex)).isLocked()) frontIndex++;
         mainActivityCallback.getPopupGenerator().showTagsPickerDialog(
                 mainActivityCallback.getSettings().getUserTages(),
                 true,
                 new Popups.PopupCallback() {
-                    @Override
-                    public void onNumberSelected(int num) {
-                        // not used
-                    }
-
-                    @Override
-                    public void onListTypeSelected(ListType listType) {
-                        //not used
-                    }
-
-                    @Override
-                    public void onTagClicked(int pos) {
-                        // not used
-                    }
 
                     @Override
                     public void onTagsSelected(ArrayList<String> newTags) {
                         BookItem item = (BookItem) list.getRandomItem(newTags.get(0));
                         if (item == null)
                             Toast.makeText(requireContext(), "No Books with this tag!", Toast.LENGTH_SHORT).show();
-                        else {
-                            adapter.onItemMove(item.getPosition(), 0);
+                        else if (!item.isLocked() && frontIndex < list.getList().size()){
+                            adapter.onItemMove(item.getPosition(), frontIndex);
                             list.reassignPositions();
                             new Handler(Looper.getMainLooper()).postDelayed(() -> exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
                             mainActivityCallback.OnListChange();
                         }
-                    }
-
-                    @Override
-                    public void onDateSelected(String date) {
-
                     }
                 }
         );
@@ -268,44 +294,14 @@ public class BookListFragment extends AbstractListFragment<FragmentBookListBindi
                 true,
                 new Popups.PopupCallback() {
                     @Override
-                    public void onNumberSelected(int num) {
-                        // not used
-                    }
-
-                    @Override
-                    public void onListTypeSelected(ListType listType) {
-                        //not used
-                    }
-
-                    @Override
-                    public void onTagClicked(int pos) {
-                        // not used
-                    }
-
-                    @Override
                     public void onTagsSelected(ArrayList<String> newTags) {
                         list.taggedItemsToTop(newTags.get(0));
                         list.reassignPositions();
                         new Handler(Looper.getMainLooper()).postDelayed(() -> exitSelectMode(MenuState.BOOK_LIST_NORMAL), 250);
                         mainActivityCallback.OnListChange();
                     }
-
-                    @Override
-                    public void onDateSelected(String date) {
-
-                    }
                 }
         );
-    }
-
-    @Override
-    public void EstimateReleaseDate() {
-
-    }
-
-    @Override
-    public void LoedBookReleaseTracker() {
-
     }
 
 

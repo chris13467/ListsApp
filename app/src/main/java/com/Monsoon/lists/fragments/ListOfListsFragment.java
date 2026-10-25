@@ -1,6 +1,8 @@
 package com.Monsoon.lists.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import com.Monsoon.lists.Adapters.ListOfListsAdapter;
 import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 import com.Monsoon.lists.Lists.ListOfLists;
+import com.Monsoon.lists.Lists.TodoList;
+import com.Monsoon.lists.Lists.baseList;
 import com.Monsoon.lists.R;
 import com.Monsoon.lists.databinding.ListOfListsFragmentBinding;
 import com.Monsoon.lists.enums.ListType;
@@ -45,31 +49,7 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
         adapter = new ListOfListsAdapter(list, new onListItemClickedListener<ListOfListsWrapper>() {
             @Override
             public void onItemClick(ListOfListsWrapper item) {
-                mainActivityCallback.getUserLists().setCurrentList(item.getList());
-                mainActivityCallback.changeToolbarTitle(item.getList().getName());
-                switch (item.getList().getListType()) {
-                    case Constants.BASIC:
-                        NavHostFragment.findNavController(ListOfListsFragment.this).
-                                navigate(R.id.action_load_basic_list);
-                        break;
-                    case Constants.TODO:
-                        NavHostFragment.findNavController(ListOfListsFragment.this).
-                                navigate(R.id.action_load_todo_list);
-                        break;
-                    case Constants.NUMBERED:
-                        NavHostFragment.findNavController(ListOfListsFragment.this).
-                                navigate(R.id.action_load_numbered_list);
-                        break;
-                    case Constants.BOOK:
-                        NavHostFragment.findNavController(ListOfListsFragment.this).
-                                navigate(R.id.action_load_book_list);
-                        break;
-                    case Constants.BOOK_SERIES:
-                        NavHostFragment.findNavController(ListOfListsFragment.this).
-                                navigate(R.id.action_load_book_series_list);
-                        break;
-
-                }
+                loadListOnContext(item);
             }
 
             @Override
@@ -116,82 +96,27 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
                 break;
         }
     }
-
-    @Override
-    public void OnRandomizePressed() {
-        // not used
-    }
-
     @Override
     public void OnEditPressed() {
         //not used
     }
 
-    @Override
-    public void OnMoveToFrontPressed() {
-        // not used
-    }
-
-    @Override
-    public void OnMoveToBackPressed() {
-        // not used
-    }
-
-    @Override
-    public void OnRandomToFront() {
-        // not used
-    }
-
-    @Override
-    public void OnRandomTagToFront() {
-        // not used
-    }
-
-    @Override
-    public void OnAllTagToFront() {
-        // not used
-    }
-
-    @Override
-    public void EstimateReleaseDate() {
-
-    }
-
-    @Override
-    public void LoedBookReleaseTracker() {
-
-    }
 
     @Override
     public void OnAddPressed() {
         mainActivityCallback.getPopupGenerator().showListSelectorPickerDialog(new Popups.PopupCallback() {
-            @Override
-            public void onNumberSelected(int num) {
-                // not used
-            }
 
             @Override
             public void onListTypeSelected(ListType listType) {
                 list.CreateList(listType.label, listType.label);
+                mainActivityCallback.assignIds();
                 mainActivityCallback.onMenuContextChanged(MenuState.LIST_OF_LISTS_NORMAL);
                 mainActivityCallback.OnListChange();
-                adapter.notifyDataSetChanged();
+                new Handler(Looper.getMainLooper()).postDelayed(()->
+                        loadListOnContext(new ListOfListsWrapper(
+                                mainActivityCallback.getUserLists().getCurrentList())), 250);
             }
 
-            @Override
-            public void onTagClicked(int pos) {
-                // not used
-            }
-
-            @Override
-            public void onTagsSelected(ArrayList<String> newTags) {
-                // not used
-            }
-
-            @Override
-            public void onDateSelected(String date) {
-
-            }
         });
 
     }
@@ -206,5 +131,33 @@ public class ListOfListsFragment extends AbstractListFragment<ListOfListsFragmen
         list.deleteSelected();
         exitSelectMode(MenuState.LIST_OF_LISTS_NORMAL);
         mainActivityCallback.OnListChange();
+    }
+
+    private void loadListOnContext(ListOfListsWrapper item){
+        mainActivityCallback.getUserLists().setCurrentList(item.getList());
+        mainActivityCallback.changeToolbarTitle(item.getList().getName());
+        switch (item.getList().getListType()) {
+            case Constants.BASIC:
+                NavHostFragment.findNavController(ListOfListsFragment.this).
+                        navigate(R.id.action_load_basic_list);
+                break;
+            case Constants.TODO:
+                NavHostFragment.findNavController(ListOfListsFragment.this).
+                        navigate(R.id.action_load_todo_list);
+                break;
+            case Constants.NUMBERED:
+                NavHostFragment.findNavController(ListOfListsFragment.this).
+                        navigate(R.id.action_load_numbered_list);
+                break;
+            case Constants.BOOK:
+                NavHostFragment.findNavController(ListOfListsFragment.this).
+                        navigate(R.id.action_load_book_list);
+                break;
+            case Constants.BOOK_SERIES:
+                NavHostFragment.findNavController(ListOfListsFragment.this).
+                        navigate(R.id.action_load_book_series_list);
+                break;
+
+        }
     }
 }

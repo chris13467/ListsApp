@@ -81,6 +81,9 @@
         <action
             android:id="@+id/action_load_book_series"
             app:destination="@id/book_series_fragment" />
+        <action
+            android:id="@+id/action_load_series_release_tracker"
+            app:destination="@id/series_release_tracker_fragment" />
 
     </fragment>
     <fragment
@@ -88,6 +91,16 @@
         android:name="com.Monsoon.lists.fragments.BookSeriesFragment"
         android:label="@string/book_series"
         tools:layout="@layout/fragment_book_series" >
+
+        <action
+            android:id="@+id/action_return_to_book_series_list"
+            app:destination="@id/book_series_list_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/series_release_tracker_fragment"
+        android:name="com.Monsoon.lists.fragments.SeriesReleaseTrackerFragment"
+        android:label="Series Release Tracker"
+        tools:layout="@layout/fragment_series_release_tracker" >
 
         <action
             android:id="@+id/action_return_to_book_series_list"

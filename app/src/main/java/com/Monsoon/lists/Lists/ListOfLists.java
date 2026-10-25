@@ -1,12 +1,17 @@
 package com.Monsoon.lists.Lists;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.Monsoon.lists.Constants;
+import com.Monsoon.lists.ListItems.BaseListItem;
+import com.Monsoon.lists.ListItems.BookItem;
+import com.Monsoon.lists.ListItems.BookSeriesItem;
 import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 import com.Monsoon.lists.Settings;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -73,6 +78,37 @@ public class ListOfLists extends baseList {
         }
         return index;
     }
+
+    public ListOfLists getCompatibleLists(baseList callingList, BaseListItem item) {
+        ListOfLists compatibleLists = new ListOfLists(this.settings);
+        Log.d("Debug", "getCompatibleLists: Calling list ID: " + callingList.getId());
+        for (String s : getCompatibleListTypes(item)){
+            for (BaseListItem b : items_){
+                baseList list = ((ListOfListsWrapper)b).getList();
+                Log.d("Debug", "getCompatibleLists: list ID->" + list.getId() + " List Type->" + list.getListType());
+                if (list.getListType().equals(s) && list.getId() != callingList.getId()) {
+                    Log.d("Debug", "getCompatibleLists: Added");
+                    compatibleLists.addItem(b);
+                }
+            }
+        }
+        return compatibleLists;
+    }
+
+    private ArrayList<String> getCompatibleListTypes(BaseListItem item){
+        ArrayList<String> compatibleTypes = new ArrayList<>();
+
+        if (item instanceof BookItem){
+            compatibleTypes.add(Constants.BOOK);
+            compatibleTypes.add(Constants.BOOK_SERIES);
+        }
+        if (item instanceof BookSeriesItem){
+            compatibleTypes.add(Constants.BOOK_SERIES);
+        }
+
+        return compatibleTypes;
+    }
+
     public static ListOfLists getListFirstOnFirstLoad(Settings settings){
         ListOfLists lists = new ListOfLists(settings);
         return lists;

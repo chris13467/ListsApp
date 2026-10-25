@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;
@@ -70,26 +71,6 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
                             public void onNumberSelected(int num) {
                                 binding.newListNumber.setText(String.valueOf(num));
                             }
-
-                            @Override
-                            public void onListTypeSelected(ListType listType) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagClicked(int pos) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagsSelected(ArrayList<String> newTags) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onDateSelected(String date) {
-
-                            }
                         });
             }
         });
@@ -115,10 +96,12 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
                 NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
                 break;
             case NUMBERED_LIST_ADD_ITEM:
+            case NUMBERED_LIST_EDIT_ITEM:
                 binding.numberedItemContentInput.setText("");
                 binding.newListNumber.setText("1");
                 binding.numberedItemAdd.setVisibility(View.GONE);
                 mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
+                adapter.setItemsClickable(true);
                 break;
             case NUMBERED_LIST_SELECT_MODE:
                 exitSelectMode(MenuState.NUMBERED_LIST_NORMAL);
@@ -135,10 +118,14 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
         binding.numberedItemAdd.setVisibility(View.VISIBLE);
         binding.numberedItemAdd.requestFocus();
         mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_ADD_ITEM);
+        adapter.setItemsClickable(false);
     }
 
     @Override
     public void OnDonePressed() {
+        if (mainActivityCallback.getMenuState() == MenuState.NUMBERED_LIST_EDIT_ITEM){
+            list.removeItem(editItem);
+        }
         list.addItem(new NumberedItem(
                 binding.numberedItemContentInput.getText().toString()),
                 Integer.parseInt(binding.newListNumber.getText().toString()));
@@ -148,6 +135,7 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
         binding.numberedItemAdd.setVisibility(View.GONE);
         mainActivityCallback.OnListChange();
         mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_NORMAL);
+        adapter.setItemsClickable(true);
     }
 
     @Override
@@ -166,13 +154,13 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
 
     @Override
     public void OnEditPressed() {
-        NumberedItem editItem = (NumberedItem) list.getSelected();
+        editItem = (NumberedItem) list.getSelected();
         binding.newListNumber.setText(String.valueOf(editItem.getPosition() + 1));
         binding.numberedItemContentInput.setText(editItem.getContents());
-        list.removeItem(editItem);
         binding.numberedItemAdd.setVisibility(View.VISIBLE);
         binding.numberedItemAdd.requestFocus();
-        mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_ADD_ITEM);
+        mainActivityCallback.onMenuContextChanged(MenuState.NUMBERED_LIST_EDIT_ITEM);
+        adapter.setItemsClickable(false);
         mainActivityCallback.OnListChange();
     }
 
@@ -203,24 +191,5 @@ public class NumberedListFragment extends AbstractListFragment<NumberedListFragm
         mainActivityCallback.OnListChange();
     }
 
-    @Override
-    public void OnRandomTagToFront() {
-        // not used
-    }
-
-    @Override
-    public void OnAllTagToFront() {
-        // not used
-    }
-
-    @Override
-    public void EstimateReleaseDate() {
-
-    }
-
-    @Override
-    public void LoedBookReleaseTracker() {
-
-    }
 
 }

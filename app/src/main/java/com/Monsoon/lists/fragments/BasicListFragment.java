@@ -102,52 +102,24 @@ private BasicList list;
     }
 
     @Override
-    public void OnRandomizePressed() {
-
-    }
-
-    @Override
     public void OnEditPressed() {
 
     }
 
-    @Override
-    public void OnMoveToFrontPressed() {
-
-    }
-
-    @Override
-    public void OnMoveToBackPressed() {
-
-    }
-
-    @Override
-    public void OnRandomToFront() {
-
-    }
 
     @Override
     public void OnSelectAll(boolean b) {
 
     }
 
+
     @Override
-    public void OnRandomTagToFront() {
+    public void OnChangeTitle() {
 
     }
 
     @Override
-    public void OnAllTagToFront() {
-
-    }
-
-    @Override
-    public void EstimateReleaseDate() {
-
-    }
-
-    @Override
-    public void LoedBookReleaseTracker() {
+    public void OnLockChange(boolean locked) {
 
     }
 }

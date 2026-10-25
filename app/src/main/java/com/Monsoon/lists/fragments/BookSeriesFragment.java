@@ -12,14 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.Monsoon.lists.Adapters.BooksInSeriesAdapter;
+import com.Monsoon.lists.Constants;
 import com.Monsoon.lists.ListItems.BookItem;
 import com.Monsoon.lists.ListItems.BookSeriesItem;
+import com.Monsoon.lists.ListItems.ListOfListsWrapper;
 import com.Monsoon.lists.Lists.BookList;
 import com.Monsoon.lists.Lists.BookSeriesList;
 import com.Monsoon.lists.R;
@@ -88,26 +91,6 @@ public class BookSeriesFragment extends AbstractListFragment<FragmentBookSeriesB
                             public void onNumberSelected(int num) {
                                 binding.newBookNumber.setText(String.valueOf(num));
                             }
-
-                            @Override
-                            public void onListTypeSelected(ListType listType) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagClicked(int pos) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onTagsSelected(ArrayList<String> newTags) {
-                                // not used
-                            }
-
-                            @Override
-                            public void onDateSelected(String date) {
-
-                            }
                         }
                 );
             }
@@ -117,25 +100,6 @@ public class BookSeriesFragment extends AbstractListFragment<FragmentBookSeriesB
             @Override
             public void onClick(View view) {
                 mainActivityCallback.getPopupGenerator().showDatePickerDialog(new Popups.PopupCallback() {
-                    @Override
-                    public void onNumberSelected(int num) {
-
-                    }
-
-                    @Override
-                    public void onListTypeSelected(ListType listType) {
-
-                    }
-
-                    @Override
-                    public void onTagClicked(int pos) {
-
-                    }
-
-                    @Override
-                    public void onTagsSelected(ArrayList<String> newTags) {
-
-                    }
 
                     @Override
                     public void onDateSelected(String date) {
@@ -179,10 +143,16 @@ public class BookSeriesFragment extends AbstractListFragment<FragmentBookSeriesB
     public void OnAddPressed() {
         showAddBookPane();
         mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_ADD);
+        bAdapter.setItemsClickable(false);
+        uAdapter.setItemsClickable(false);
     }
 
     @Override
     public void OnDonePressed() {
+        if (mainActivityCallback.getMenuState() == MenuState.BOOK_SERIES_EDIT){
+            if (editItem.isUpcoming()) item.removeBookFromUpcomingBooks(editItem);
+            else item.removeBookFromBookSeries(editItem);
+        }
         BookItem book = new BookItem(
                 binding.bookTitleInput.getText().toString(),
                 newBookTags
@@ -202,6 +172,8 @@ public class BookSeriesFragment extends AbstractListFragment<FragmentBookSeriesB
         bAdapter.onDataChanged(item.getBookList());
         mainActivityCallback.OnListChange();
         mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_NORMAL);
+        bAdapter.setItemsClickable(true);
+        uAdapter.setItemsClickable(true);
         hideAddBookPane();
     }
 
@@ -218,7 +190,11 @@ public class BookSeriesFragment extends AbstractListFragment<FragmentBookSeriesB
                 NavHostFragment.findNavController(this).navigate(R.id.action_return_to_book_series_list);
                 break;
             case BOOK_SERIES_ADD:
+            case BOOK_SERIES_EDIT:
                 hideAddBookPane();
+                mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_NORMAL);
+                bAdapter.setItemsClickable(true);
+                uAdapter.setItemsClickable(true);
                 break;
             case BOOK_SERIES_SELECT_MODE:
                 exitSelectMode(MenuState.BOOK_SERIES_NORMAL);
@@ -228,62 +204,61 @@ public class BookSeriesFragment extends AbstractListFragment<FragmentBookSeriesB
     }
 
     @Override
-    public void OnRandomizePressed() {
-        // NotUsed
-    }
-
-    @Override
     public void OnEditPressed() {
-        BookItem edit = item.getSelected();
-        if (edit != null){
+        editItem = item.getSelected();
+        if (editItem != null){
             showAddBookPane();
-            binding.newBookNumber.setText(String.valueOf(edit.getPosition() + 1));
-            binding.bookTitleInput.setText(edit.getContents());
-            if (edit.isUpcoming()) item.removeBookFromUpcomingBooks(edit);
-            else item.removeBookFromBookSeries(edit);
-            binding.isUpcoming.setChecked(edit.isUpcoming());
-            if (edit.getReleaseDate() != null)
-                binding.bookReleaseDatePicker.setText(edit.getReleaseDate()
+            binding.newBookNumber.setText(String.valueOf(editItem.getPosition() + 1));
+            binding.bookTitleInput.setText(editItem.getContents());
+            binding.isUpcoming.setChecked(editItem.isUpcoming());
+            if (editItem.getReleaseDate() != null)
+                binding.bookReleaseDatePicker.setText(editItem.getReleaseDate()
                         .format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-            mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_ADD);
+            mainActivityCallback.onMenuContextChanged(MenuState.BOOK_SERIES_EDIT);
+            bAdapter.setItemsClickable(false);
+            uAdapter.setItemsClickable(false);
             mainActivityCallback.OnListChange();
         }
     }
 
     @Override
-    public void OnMoveToFrontPressed() {
-        // not used
-    }
+    public void OnAddToOtherPressed() {
+        editItem = item.getSelected();
+        mainActivityCallback.getPopupGenerator().showMoveListSelector(
+                mainActivityCallback.getUserLists(),
+                list, editItem,
+                new Popups.PopupCallback() {
+                    @Override
+                    public void onListSelected(ListOfListsWrapper list) {
+                        switch (list.getList().getListType()){
+                            case Constants.BOOK:
+                                StringBuilder sb = new StringBuilder(editItem.getSeriesTitle());
+                                sb.append(" book ").append(editItem.getPosition() + 1);
+                                BookItem book = new BookItem(sb.toString(), editItem.getTags());
+                                list.getList().addItem(book);
+                                break;
+                            case Constants.BOOK_SERIES:
+                                BookSeriesItem newSeries = new BookSeriesItem(editItem.getContents());
+                                newSeries.setTags(editItem.getTags());
+                                editItem.setSeriesTitle(editItem.getContents());
+                                newSeries.addBook(editItem);
+                                list.getList().addItem(newSeries);
+                                break;
+                            default:
+                                Log.d("ERROR", "onListSelected: Incompatible List types");
+                        }
 
-    @Override
-    public void OnMoveToBackPressed() {
-        // not used
-    }
-
-    @Override
-    public void OnRandomToFront() {
-        // not used
-    }
-
-    @Override
-    public void OnRandomTagToFront() {
-        // not used
-    }
-
-    @Override
-    public void OnAllTagToFront() {
-        // not used
+                        mainActivityCallback.OnListChange();
+                        exitSelectMode(MenuState.BOOK_SERIES_NORMAL);
+                    }
+                }
+        );
     }
 
     @Override
     public void EstimateReleaseDate() {
         item.estimateNewReleaseDate();
         notifiyDatasetChanged();
-    }
-
-    @Override
-    public void LoedBookReleaseTracker() {
-        //not used
     }
 
     @Override
@@ -340,13 +315,16 @@ public class BookSeriesFragment extends AbstractListFragment<FragmentBookSeriesB
         binding.numBooksTextView.setText(sb.toString());
         if (item.getNumberOfReadBooks() == item.getNumberOfReleasedBooks() && item.hasUpcomingBook())
             binding.diamondIcon.setImageTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.upcoming)));
+                    ContextCompat.getColor(requireContext(), R.color.read_with_upcoming)));
         else if (item.getNumberOfReadBooks() == item.getNumberOfReleasedBooks())
             binding.diamondIcon.setImageTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.read)));
+                    ContextCompat.getColor(requireContext(), R.color.read_no_upcoming)));
+        else if (item.hasUpcomingBook())
+            binding.diamondIcon.setImageTintList(ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), R.color.not_read_with_upcoming)));
         else
             binding.diamondIcon.setImageTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.not_read)));
+                    ContextCompat.getColor(requireContext(), R.color.not_read_no_upcoming)));
         if (item.hasUpcomingBook()){
             if (item.getNextUpcomingBook().getReleaseDate() != null) {
                 binding.nextUpcomingReleaseTextView.setVisibility(View.VISIBLE);

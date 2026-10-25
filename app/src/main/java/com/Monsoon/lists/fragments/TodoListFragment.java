@@ -98,30 +98,12 @@ private TodoListAdapter adapter;
         NavHostFragment.findNavController(this).navigate(R.id.action_return_to_lists_of_lists);
     }
 
-    @Override
-    public void OnRandomizePressed() {
-
-    }
 
     @Override
     public void OnEditPressed() {
 
     }
 
-    @Override
-    public void OnMoveToFrontPressed() {
-
-    }
-
-    @Override
-    public void OnMoveToBackPressed() {
-
-    }
-
-    @Override
-    public void OnRandomToFront() {
-
-    }
 
     @Override
     public void OnSelectAll(boolean b) {
@@ -129,22 +111,12 @@ private TodoListAdapter adapter;
     }
 
     @Override
-    public void OnRandomTagToFront() {
+    public void OnChangeTitle() {
 
     }
 
     @Override
-    public void OnAllTagToFront() {
-
-    }
-
-    @Override
-    public void EstimateReleaseDate() {
-
-    }
-
-    @Override
-    public void LoedBookReleaseTracker() {
+    public void OnLockChange(boolean locked) {
 
     }
 }

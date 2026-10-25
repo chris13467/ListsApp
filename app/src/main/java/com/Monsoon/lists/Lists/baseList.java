@@ -10,29 +10,29 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class baseList implements Serializable {
-    protected static final AtomicLong idCounter = new AtomicLong(1);
-    protected final long id;
+    protected long id;
     protected String listType_;
     protected String name_;
     protected AbstractList<BaseListItem> items_;
     protected BaseListItem currentItem_;
+    protected boolean firstLoad;
     private boolean isSelected;
     private static final long serialVersionUID = 1L;
 
     //Constructors
     public baseList() {
-        this.id = idCounter.getAndIncrement();
         name_ = "";
         listType_ = Constants.ABSTRACT;
         currentItem_ = null;
         isSelected = false;
+        this.firstLoad = true;
     }
     public baseList(String name) {
-        this.id = idCounter.getAndIncrement();
         this.name_ = name;
         listType_ = Constants.ABSTRACT;
         currentItem_ = null;
         isSelected = false;
+        this.firstLoad = true;
     }
 
     public boolean isSelected(){
@@ -53,6 +53,9 @@ public abstract class baseList implements Serializable {
         return name_;
     }
     public long getId(){ return id; }
+    public void setId(long id){
+        this.id = id;
+    }
 
     public AbstractList<BaseListItem> getList(){
         return items_;
@@ -133,6 +136,14 @@ public abstract class baseList implements Serializable {
         for (BaseListItem i : items_){
             i.setSelected(false);
         }
+    }
+
+    public boolean isFirstLoad(){
+        return this.firstLoad;
+    }
+
+    public void onFirstLoad(){
+        this.firstLoad = false;
     }
 
 }

@@ -72,11 +72,20 @@ public class NumberedList extends baseList {
         for (int j = 0; j < numPasses; j++) {
             for (int i = 0; i < items_.size(); i++) {
                 int newPos = rand.nextInt(items_.size());
-                Collections.swap(items_, i, newPos);
+                if (!((NumberedItem)items_.get(i)).isLocked() && !((NumberedItem)items_.get(newPos)).isLocked()) {
+                    Collections.swap(items_, i, newPos);
+                }
             }
         }
         reassignPositions();
     }
 
+    public void setSelectedLockedState(boolean locked){
+        for (BaseListItem item : items_){
+            if (item.isSelected()) {
+                ((NumberedItem) item).setLock(locked);
+            }
+        }
+    }
 
 }

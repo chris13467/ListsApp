@@ -2,14 +2,17 @@ package com.Monsoon.lists.Adapters;
 
 import static android.content.ContentValues.TAG;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.Monsoon.lists.ListItems.BaseListItem;
 import com.Monsoon.lists.ListItems.BookItem;
 import com.Monsoon.lists.Lists.BookList;
 import com.Monsoon.lists.R;
@@ -21,12 +24,14 @@ public class BookListAdapter extends AbstractListAdapter<BookList, BookItem, Boo
     public class ViewHolder extends ListsViewHolder<BookItem>{
         TextView queueNumberView;
         TextView tagsView;
+        ImageView lockIcon;
 
         public ViewHolder(View itemView){
             super(itemView);
             textContent = itemView.findViewById(R.id.book_item_text);
             queueNumberView = itemView.findViewById(R.id.book_number_view);
             tagsView = itemView.findViewById(R.id.book_tags_text_view);
+            lockIcon = itemView.findViewById(R.id.lock_icon);
         }
 
         @Override
@@ -35,6 +40,11 @@ public class BookListAdapter extends AbstractListAdapter<BookList, BookItem, Boo
             textContent.setText(item.getContents());
             queueNumberView.setText(String.valueOf(item.getPosition()+1));
             tagsView.setText(Util.getTagsString(item.getTags(), false));
+            if (item.isLocked()){
+                lockIcon.setImageResource(R.drawable.baseline_lock_24);
+            } else {
+                lockIcon.setImageResource(R.drawable.baseline_lock_open_24);
+            }
         }
 
     }
